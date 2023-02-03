@@ -1,3 +1,3 @@
 import { Router } from 'express'
 
-const authRouter = new Router()
+const userRouter = new Router()
