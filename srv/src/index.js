@@ -1,1 +1,1 @@
-// entrypoint
+import mongoose from 'mongoose'
