@@ -1,7 +1,7 @@
+import { Header } from './components/Header/Header'
+
 const App = () => (
-  <div className="App">
-    <h1> Memo game </h1>
-  </div>
+  <Header />
 )
 
 export default App
