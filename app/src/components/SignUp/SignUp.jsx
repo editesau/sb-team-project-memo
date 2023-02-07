@@ -14,7 +14,7 @@ export const SignUp = () => (
     {(formik) => (
       <Form className={styles.container}>
         <div className={styles.main}>
-          <div className={styles.main_item}>
+          <div className={styles.mainItem}>
 
             <div className={styles.textLabel}>
               <h1>Sign up</h1>
