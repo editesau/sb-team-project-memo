@@ -1,7 +1,5 @@
-import { SignUp } from './components/SignUp/SignUp'
-
 const App = () => (
-  <SignUp />
+  <h1>App</h1>
 )
 
 export default App
