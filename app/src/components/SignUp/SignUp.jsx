@@ -9,7 +9,7 @@ export const SignUp = () => (
   <Formik
     initialValues={{ userName: '', email: '', password: '' }}
     validationSchema={validationSchemaSignUp}
-    onSubmit={(data) => console.log(data)}
+    onSubmit={(dataa) => console.log(dataa)}
   >
     {(formik) => (
       <Form className={styles.container}>
