@@ -1,24 +1,24 @@
 import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import {
-  MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH, MONGO_HOST, MONGO_PORT,
+  MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH,
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
 
 dotenv.config()
 
-export const genConnectionString = () => {
+export const genConnectionString = (host, port) => {
   if (!MONGO_CA_PATH) throw Error('No mongo CA Path in environment')
   if (!MONGO_CLIENT_CRT_PATH) throw Error('No mongo client crt Path in environment')
 
-  return `mongodb://${MONGO_HOST}:${MONGO_PORT}/`
+  return `mongodb://${host}:${port}/`
 }
 
-export const genConnectionOptions = () => ({
+export const genConnectionOptions = (caCertPath, clientCertPath) => ({
   tls: true,
   tlsInsecure: true,
-  tlsCAFile: MONGO_CA_PATH,
-  tlsCertificateKeyFile: MONGO_CLIENT_CRT_PATH,
+  tlsCAFile: caCertPath,
+  tlsCertificateKeyFile: clientCertPath,
   authMechanism: 'MONGODB-X509',
 })
 
