@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.24.4",
     "formik": "^2.2.9",
     "ky": "^0.33.2",
     "node-sass": "^8.0.0",
