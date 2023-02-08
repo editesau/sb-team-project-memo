@@ -15,11 +15,11 @@ import {
 import { authRouter } from './routers/authRouter.js'
 
 const app = express()
-app.use(cors)
+// app.use(cors)
 app.use(morgan(MORGAN_ENV))
 app.use(express.json())
 
-app.use(`/api/${API_VERSION}/auth`, authRouter)
+app.use(`/api/v${API_VERSION}/auth`, authRouter)
 
 const startApp = async () => {
   try {
@@ -29,7 +29,7 @@ const startApp = async () => {
     await mongoose.connect(mongoConnectionString, mongoConnectionOptions)
     console.log('DB connected')
     try {
-      app.listen(APP_PORT, () => {
+      app.listen(APP_PORT, '0.0.0.0', () => {
         console.log('Server has been started on port:', APP_PORT)
       })
     } catch (appError) {

@@ -16,7 +16,7 @@ export const genConnectionString = (host, port) => {
   if (!MONGO_CA_PATH) throw Error('No mongo CA Path in environment')
   if (!MONGO_CLIENT_CRT_PATH) throw Error('No mongo client crt Path in environment')
 
-  return `mongodb://${host}:${port}/`
+  return `mongodb://${host}:${port}/memo-game`
 }
 /** Function to generate mongoDB connection options with x509 Auth
  *@param caCertPath {string} Full path to CA certificate
