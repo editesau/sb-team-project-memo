@@ -21,7 +21,7 @@ export const SignUp = () => (
             </div>
 
             <div className={styles.fieldContainer}>
-              <Field type="text" name="userName" className={styles.field} placeholder="UserSchema name" autoComplete="off" />
+              <Field type="text" name="userName" className={styles.field} placeholder="User name" autoComplete="off" />
             </div>
 
             <div className={styles.fieldContainer}>
