@@ -1,10 +1,39 @@
 import mongoose from 'mongoose'
+import express from 'express'
+import morgan from 'morgan'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
+import {
+  API_VERSION,
+  APP_PORT,
+  MONGO_CA_PATH,
+  MONGO_CLIENT_CRT_PATH,
+  MONGO_HOST,
+  MONGO_PORT,
+  MORGAN_ENV,
+} from './helpers/constants.js'
+import { authRouter } from './routers/authRouter.js'
+
+const app = express()
+
+app.use(morgan(MORGAN_ENV))
+app.use(express.json())
+
+app.use(`/api/v${API_VERSION}/auth`, authRouter)
 
 const startApp = async () => {
   try {
-    await mongoose.connect(genConnectionString(), genConnectionOptions())
-    console.log('DB connected ')
+    const mongoConnectionString = genConnectionString(MONGO_HOST, MONGO_PORT)
+    const mongoConnectionOptions = genConnectionOptions(MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH)
+    mongoose.set('strictQuery', false)
+    await mongoose.connect(mongoConnectionString, mongoConnectionOptions)
+    console.log('DB connected')
+    try {
+      app.listen(APP_PORT, '0.0.0.0', () => {
+        console.log('Server has been started on port:', APP_PORT)
+      })
+    } catch (appError) {
+      console.error(`Failed to start app on port ${APP_PORT}`)
+    }
   } catch (dbError) {
     console.error(`Failed to connect to MongoDB ${dbError}`)
   }
