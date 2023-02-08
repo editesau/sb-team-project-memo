@@ -1,7 +1,9 @@
 import * as dotenv from 'dotenv'
+import mongoose from 'mongoose'
 import {
   MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH, MONGO_HOST, MONGO_PORT,
 } from '../helpers/constants.js'
+import UserSchema from './models/UserSchema.js'
 
 dotenv.config()
 
@@ -19,3 +21,19 @@ export const genConnectionOptions = () => ({
   tlsCertificateKeyFile: MONGO_CLIENT_CRT_PATH,
   authMechanism: 'MONGODB-X509',
 })
+
+export const createUser = (user) => {
+  const User = mongoose.model('users', UserSchema)
+  const newUser = new User(user)
+  return newUser.save() // promise
+}
+
+export const setRefreshToken = (userId, token) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate({ userId }, { refreshToken: token }) // promise
+}
+
+export const clearRefreshToken = (userId) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate({ userId }, { refreshToken: '' })
+}
