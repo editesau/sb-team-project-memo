@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import express from 'express'
-import cors from 'cors'
 import morgan from 'morgan'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
@@ -15,7 +14,7 @@ import {
 import { authRouter } from './routers/authRouter.js'
 
 const app = express()
-// app.use(cors)
+
 app.use(morgan(MORGAN_ENV))
 app.use(express.json())
 

@@ -35,7 +35,7 @@ export const genConnectionOptions = (caCertPath, clientCertPath) => ({
  *@param user {Object} user object required fields - email, password
  *@return {Promise} mongoDB .save() promise
  */
-export const createUser = (user) => {
+export const dbCreateUser = (user) => {
   const User = mongoose.model('users', UserSchema)
   const newUser = new User(user)
   return newUser.save() // promise
@@ -45,7 +45,7 @@ export const createUser = (user) => {
  *@param token {string} refresh token to be set
  *@return {Promise} mongoDB .findByIdAndUpdate promise
  */
-export const setRefreshToken = (userId, token) => {
+export const dbSetRefreshToken = (userId, token) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate({ userId }, { refreshToken: token }) // promise
 }
@@ -53,7 +53,7 @@ export const setRefreshToken = (userId, token) => {
  *@param userId {string} mongoDB userID
  *@return {Promise} mongoDB .findByIdAndUpdate promise
  */
-export const clearRefreshToken = (userId) => {
+export const dbClearRefreshToken = (userId) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate({ userId }, { refreshToken: '' }) // promise
 }

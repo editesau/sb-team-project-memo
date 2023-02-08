@@ -1,10 +1,9 @@
-import { createUser } from '../db/dbActions.js'
+import { dbCreateUser } from '../db/dbActions.js'
 
 export const userCreate = async (req, res) => {
   const { email, password } = req.body
   try {
-    const result = await createUser({ email, password })
-    // eslint-disable-next-line no-underscore-dangle
+    const result = await dbCreateUser({ email, password })
     const { refreshToken, password: _, ...userData } = result._doc
     res.status(200).json(userData)
   } catch (dbError) {
