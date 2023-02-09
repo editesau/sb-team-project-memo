@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv'
+import * as bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import {
+  BCRYPT_SALT,
   MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH,
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
@@ -39,6 +41,12 @@ export const dbCreateUser = (user) => {
   const User = mongoose.model('users', UserSchema)
   const newUser = new User(user)
   return newUser.save() // promise
+}
+
+export const dbLoginUser = async (user) => {
+  const User = mongoose.model('users', UserSchema)
+  const cryptPassword = await bcrypt.hash(user.password, BCRYPT_SALT)
+  return User.findOne({ email: user.email, password: cryptPassword })
 }
 /** set refresh token to provided userID
  *@param userId {string} mongoDB userID
