@@ -1,11 +1,8 @@
 import { Link } from 'react-router-dom'
-import styles from './menu.module.scss'
+import styles from './gameMenu.module.scss'
 
 export const GameMenu = () => {
-  function exitHandler() {
-    console.log('Exit')
-  }
-
+  const exitHandler = () => console.log('Exit')
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -18,7 +15,6 @@ export const GameMenu = () => {
           {' '}
           Exit
           {' '}
-
         </span>
       </div>
     </div>
