@@ -40,7 +40,7 @@ export const genConnectionOptions = (caCertPath, clientCertPath) => ({
 export const dbCreateUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
   const cryptPassword = await bcrypt.hash(user.password, +BCRYPT_SALT)
-  const newUser = new User({ email: user.email, password: cryptPassword })
+  const newUser = new User({ email: user.email, password: cryptPassword, userName: user.userName })
   return newUser.save() // promise
 }
 
