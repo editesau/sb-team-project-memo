@@ -2,6 +2,7 @@ import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
 import { useMutation } from '@tanstack/react-query'
+import { notifyError, notifySuccess } from '../../tools/toaster'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signup.module.scss'
 import { validationSchemaSignUp } from './validationSchema/validationSchema'
@@ -10,8 +11,14 @@ import api from '../../tools/Api/Api.js'
 export const SignUp = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: (signUpData) => api.signUp(signUpData),
-    onSuccess: (res) => console.log(res),
-    onError: (res) => console.log(res),
+    onSuccess: (res) => {
+      console.log(res)
+      notifySuccess('Регистрация прошла успешно')
+    },
+    onError: (res) => {
+      console.log(res)
+      notifyError('Ошибка с регистрацией')
+    },
   })
 
   return (
