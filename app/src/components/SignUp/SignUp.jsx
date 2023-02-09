@@ -2,7 +2,7 @@ import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
 import { useMutation } from '@tanstack/react-query'
-import { notifyError, notifySuccess } from '../../tools/toaster'
+import { notifyError, notifySuccess } from '../../tools/toaster/toaster'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signup.module.scss'
 import { validationSchemaSignUp } from './validationSchema/validationSchema'
