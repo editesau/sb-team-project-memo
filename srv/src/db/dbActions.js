@@ -37,16 +37,20 @@ export const genConnectionOptions = (caCertPath, clientCertPath) => ({
  *@param user {Object} user object required fields - email, password
  *@return {Promise} mongoDB .save() promise
  */
-export const dbCreateUser = (user) => {
+export const dbCreateUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
-  const newUser = new User(user)
+  const cryptPassword = await bcrypt.hash(user.password, +BCRYPT_SALT)
+  const newUser = new User({ email: user.email, password: cryptPassword })
   return newUser.save() // promise
 }
 
 export const dbLoginUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
-  const cryptPassword = await bcrypt.hash(user.password, BCRYPT_SALT)
-  return User.findOne({ email: user.email, password: cryptPassword })
+  const dbUser = await User.findOne({ email: user.email })
+  if (dbUser) {
+    return bcrypt.compare(user.password, dbUser.password)
+  }
+  return false
 }
 /** set refresh token to provided userID
  *@param userId {string} mongoDB userID
