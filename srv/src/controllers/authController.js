@@ -36,9 +36,15 @@ export const userLogin = async (req, res) => {
       res.cookie('access_token', accessToken, { httpOnly: true })
         .cookie('refresh_token', refreshToken, { httpOnly: true })
         .status(200)
-        .json('Successfully login')
+        .json({ message: 'Successfully login' })
+    } else {
+      res.status(400).json({ message: 'Incorrect email or password' })
     }
   } catch (dbError) {
-    console.log(dbError)
+    res.status(500).json({ message: dbError.message })
   }
+}
+
+export const userLogout = async (req, res) => {
+
 }

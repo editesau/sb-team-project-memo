@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { JWT_ACCESS_LIFE, JWT_REFRESH_LIFE, JWT_SECRET } from '../helpers/constants.js'
 
-const createAccessToken = (payload) => jwt.sign(
+export const createAccessToken = (payload) => jwt.sign(
   payload,
   JWT_SECRET,
   {
@@ -9,24 +9,18 @@ const createAccessToken = (payload) => jwt.sign(
   },
 )
 
-const createRefreshToken = (payload) => jwt.sign(
+export const createRefreshToken = (payload) => jwt.sign(
   payload,
   JWT_SECRET,
   {
     expiresIn: +JWT_REFRESH_LIFE,
   },
 )
-const checkToken = (accessToken) => {
+export const checkToken = (accessToken) => {
   try {
     return jwt.verify(accessToken, JWT_SECRET)
   } catch (error) {
     console.log(error)
     throw new Error(error.message)
   }
-}
-
-export {
-  createRefreshToken,
-  createAccessToken,
-  checkToken,
 }
