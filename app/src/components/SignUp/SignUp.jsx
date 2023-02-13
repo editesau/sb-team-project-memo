@@ -2,6 +2,7 @@ import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
 import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signup.module.scss'
@@ -9,15 +10,15 @@ import { validationSchemaSignUp } from './validationSchema/validationSchema'
 import api from '../../tools/Api/Api.js'
 
 export const SignUp = () => {
+  const navigate = useNavigate()
   const { mutate, isLoading } = useMutation({
     mutationFn: (signUpData) => api.signUp(signUpData),
-    onSuccess: (res) => {
-      console.log(res)
-      notifySuccess('Регистрация прошла успешно')
+    onSuccess: () => {
+      notifySuccess('Registration successful')
+      navigate('/signin')
     },
     onError: (res) => {
-      console.log(res)
-      notifyError('Ошибка с регистрацией')
+      notifyError(res.message)
     },
   })
 

@@ -1,8 +1,10 @@
 import { ToastContainer } from 'react-toastify'
+import { SignIn } from './components/SignIn/SignIn.jsx'
+import { GameMenu } from './components/GameMenu/GameMenu.jsx'
 
 const App = () => (
   <>
-    <h1>App</h1>
+    <GameMenu />
     <ToastContainer />
   </>
 )

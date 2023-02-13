@@ -1,7 +1,7 @@
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signin.module.scss'
@@ -10,15 +10,15 @@ import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
 
 export const SignIn = () => {
+  const navigate = useNavigate()
   const { mutate, isLoading } = useMutation({
     mutationFn: (signInData) => api.signIn(signInData),
-    onSuccess: (res) => {
-      console.log(res)
+    onSuccess: () => {
       notifySuccess('Login successful')
+      navigate('/menu')
     },
     onError: (res) => {
-      console.log(res)
-      notifyError('Login Error')
+      notifyError(`Login Error ${res.message}`)
     },
   })
   return (

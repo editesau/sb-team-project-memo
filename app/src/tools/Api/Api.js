@@ -17,6 +17,11 @@ class Api {
     `${this.baseUrl}/api/v1/auth/signin`,
     { headers: this.headers, body: JSON.stringify(signInData), credentials: 'include' },
   )
+
+  signOut = () => ky.post(
+    `${this.baseUrl}/api/v1/auth/signout`,
+    { headers: this.headers, credentials: 'include' },
+  )
 }
 
 const api = new Api('http://localhost:5050')
