@@ -47,7 +47,7 @@ export const SignIn = () => {
               </div>
 
               <div className={styles.btnContainer}>
-                <MemoButton text="Авторизация" type="submit" disabled={!(formik.isValid && formik.dirty)} />
+                <MemoButton text="Авторизация" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
               </div>
 
               <div className={styles.redirectContainer}>
