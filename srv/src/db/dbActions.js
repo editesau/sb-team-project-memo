@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv'
 import * as bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import {
@@ -6,8 +5,6 @@ import {
   MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH,
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
-
-dotenv.config()
 
 /** Function to generate mongoDB connection URL
  *@param host {string} IP address or DNS hostname
