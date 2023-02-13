@@ -43,15 +43,19 @@ export const dbCreateUser = async (user) => {
 /** function to check email and crypt password
  * provided in user object with DB
  * @param user user object required fields - email, password
- * @return {boolean} successfull login
+ * @return {Promise<string>} successfull login
  */
 export const dbLoginUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
   const dbUser = await User.findOne({ email: user.email })
   if (dbUser) {
-    return bcrypt.compare(user.password, dbUser.password)
+    const isPasswordValid = await bcrypt.compare(user.password, dbUser.password)
+    if (isPasswordValid) {
+      return dbUser._id.toString()
+    }
+    return ''
   }
-  return false
+  return ''
 }
 /** set refresh token to provided userID
  *@param userId {string} mongoDB userID
@@ -60,7 +64,7 @@ export const dbLoginUser = async (user) => {
  */
 export const dbSetRefreshToken = (userId, token) => {
   const User = mongoose.model('users', UserSchema)
-  return User.findByIdAndUpdate({ userId }, { refreshToken: token }) // promise
+  return User.findByIdAndUpdate(userId, { refreshToken: token }) // promise
 }
 /** set refresh token = '' to provided userID
  *@param userId {string} mongoDB userID
@@ -68,5 +72,5 @@ export const dbSetRefreshToken = (userId, token) => {
  */
 export const dbClearRefreshToken = (userId) => {
   const User = mongoose.model('users', UserSchema)
-  return User.findByIdAndUpdate({ userId }, { refreshToken: '' }) // promise
+  return User.findByIdAndUpdate(userId, { refreshToken: '' }) // promise
 }

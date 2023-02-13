@@ -1,4 +1,5 @@
-import { dbCreateUser, dbLoginUser } from '../db/dbActions.js'
+import { dbCreateUser, dbLoginUser, dbSetRefreshToken } from '../db/dbActions.js'
+import { createAccessToken, createRefreshToken } from '../services/jwtService.js'
 
 /** Create user with parameters provided in request body in JSON
  * send statuses to client:
@@ -27,14 +28,17 @@ export const userCreate = async (req, res) => {
 export const userLogin = async (req, res) => {
   const { email, password } = req.body
   try {
-    const result = await dbLoginUser({ email, password })
-    res.status(200).json(result)
+    const userId = await dbLoginUser({ email, password })
+    if (userId) {
+      const accessToken = createAccessToken({ userId })
+      const refreshToken = createRefreshToken({ userId })
+      await dbSetRefreshToken(userId, refreshToken)
+      res.cookie('access_token', accessToken, { httpOnly: true })
+        .cookie('refresh_token', refreshToken, { httpOnly: true })
+        .status(200)
+        .json('Successfully login')
+    }
   } catch (dbError) {
     console.log(dbError)
-    if (dbError.message.indexOf('duplicate') !== -1) {
-      res.status(409).json({ message: 'User already exists' })
-    } else {
-      res.status(500).json({ message: dbError.message })
-    }
   }
 }
