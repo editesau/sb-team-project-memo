@@ -40,7 +40,11 @@ export const dbCreateUser = async (user) => {
   const newUser = new User({ email: user.email, password: cryptPassword, userName: user.userName })
   return newUser.save() // promise
 }
-
+/** function to check email and crypt password
+ * provided in user object with DB
+ * @param user user object required fields - email, password
+ * @return {boolean} successfull login
+ */
 export const dbLoginUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
   const dbUser = await User.findOne({ email: user.email })
