@@ -10,3 +10,5 @@ export const MONGO_CLIENT_CRT_PATH = process.env.MONGO_CLIENT_CRT_PATH || undefi
 export const MORGAN_ENV = process.env.MORGAN_ENV || 'dev'
 export const API_VERSION = process.env.API_VERSION || 1
 export const APP_PORT = process.env.APP_PORT || 5051
+
+export const BCRYPT_SALT = process.env.BCRYPT_SALT

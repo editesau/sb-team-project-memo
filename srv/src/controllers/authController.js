@@ -1,4 +1,4 @@
-import { dbCreateUser } from '../db/dbActions.js'
+import { dbCreateUser, dbLoginUser } from '../db/dbActions.js'
 
 /** Create user with parameters provided in request body in JSON
  * send statuses to client:
@@ -17,6 +17,21 @@ export const userCreate = async (req, res) => {
     res.status(200).json(userData)
   } catch (dbError) {
     if (dbError.message.indexOf('duplicate')) {
+      res.status(409).json({ message: 'User already exists' })
+    } else {
+      res.status(500).json({ message: dbError.message })
+    }
+  }
+}
+
+export const userLogin = async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const result = await dbLoginUser({ email, password })
+    res.status(200).json(result)
+  } catch (dbError) {
+    console.log(dbError)
+    if (dbError.message.indexOf('duplicate') !== -1) {
       res.status(409).json({ message: 'User already exists' })
     } else {
       res.status(500).json({ message: dbError.message })

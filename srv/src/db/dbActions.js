@@ -1,11 +1,10 @@
-import * as dotenv from 'dotenv'
+import * as bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import {
+  BCRYPT_SALT,
   MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH,
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
-
-dotenv.config()
 
 /** Function to generate mongoDB connection URL
  *@param host {string} IP address or DNS hostname
@@ -35,10 +34,24 @@ export const genConnectionOptions = (caCertPath, clientCertPath) => ({
  *@param user {Object} user object required fields - email, password
  *@return {Promise} mongoDB .save() promise
  */
-export const dbCreateUser = (user) => {
+export const dbCreateUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
-  const newUser = new User(user)
+  const cryptPassword = await bcrypt.hash(user.password, +BCRYPT_SALT)
+  const newUser = new User({ email: user.email, password: cryptPassword, userName: user.userName })
   return newUser.save() // promise
+}
+/** function to check email and crypt password
+ * provided in user object with DB
+ * @param user user object required fields - email, password
+ * @return {boolean} successfull login
+ */
+export const dbLoginUser = async (user) => {
+  const User = mongoose.model('users', UserSchema)
+  const dbUser = await User.findOne({ email: user.email })
+  if (dbUser) {
+    return bcrypt.compare(user.password, dbUser.password)
+  }
+  return false
 }
 /** set refresh token to provided userID
  *@param userId {string} mongoDB userID
