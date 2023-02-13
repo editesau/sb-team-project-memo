@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
   API_VERSION,
@@ -19,6 +20,7 @@ const app = express()
 app.use(cors())
 app.use(morgan(MORGAN_ENV))
 app.use(express.json())
+app.use(cookieParser())
 
 app.use(`/api/v${API_VERSION}/auth`, authRouter)
 
