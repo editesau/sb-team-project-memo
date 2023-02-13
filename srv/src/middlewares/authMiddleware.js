@@ -18,3 +18,22 @@ export const checkAuth = (req, res, next) => {
   }
   return next()
 }
+
+export const checkRefreshToken = (req, res, next) => {
+  const { refresh_token: refreshToken } = req.cookies
+  if (refreshToken) {
+    try {
+      const { userId } = checkToken(refreshToken)
+      req.userId = userId
+      req.refreshToken = refreshToken
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        return res.status(401).json({ message: 'Refresh token expired' })
+      }
+      return res.status(500).json({ message: error.message })
+    }
+  } else {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+  return next()
+}

@@ -74,3 +74,8 @@ export const dbClearRefreshToken = (userId) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate(userId, { refreshToken: '' }) // promise
 }
+
+export const dbGetUser = async (userId) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findById(userId)
+}

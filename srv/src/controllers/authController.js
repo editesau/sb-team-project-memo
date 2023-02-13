@@ -1,5 +1,5 @@
 import {
-  dbClearRefreshToken, dbCreateUser, dbLoginUser, dbSetRefreshToken,
+  dbClearRefreshToken, dbCreateUser, dbGetUser, dbLoginUser, dbSetRefreshToken,
 } from '../db/dbActions.js'
 import { createAccessToken, createRefreshToken } from '../services/jwtService.js'
 
@@ -51,9 +51,32 @@ export const userLogout = async (req, res) => {
   try {
     const dbResult = await dbClearRefreshToken(req.userId)
     if (dbResult) {
-      res.clearCookie('access_token').clearCookie('refresh_token').status(200).json({ message: 'Successfully logout' })
+      res
+        .clearCookie('access_token')
+        .clearCookie('refresh_token')
+        .status(200).json({ message: 'Successfully logout' })
     } else {
       res.status(400).json({ message: 'Bad request' })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const userAuthRefresh = async (req, res) => {
+  const userId = req.userId
+  try {
+    const dbUser = await dbGetUser(userId)
+    if (dbUser.refreshToken === req.refreshToken) {
+      const accessToken = createAccessToken({ userId })
+      const refreshToken = createRefreshToken({ userId })
+      await dbSetRefreshToken(userId, refreshToken)
+      res.cookie('access_token', accessToken, { httpOnly: true })
+        .cookie('refresh_token', refreshToken, { httpOnly: true })
+        .status(200)
+        .json({ message: 'Tokens updated' })
+    } else {
+      res.status(401).json({ message: 'Unauthorized' })
     }
   } catch (error) {
     res.status(500).json({ message: error.message })

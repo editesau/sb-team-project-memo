@@ -16,4 +16,4 @@ export const createRefreshToken = (payload) => jwt.sign(
     expiresIn: +JWT_REFRESH_LIFE,
   },
 )
-export const checkToken = (accessToken) => jwt.verify(accessToken, JWT_SECRET)
+export const checkToken = (jwtToken) => jwt.verify(jwtToken, JWT_SECRET)
