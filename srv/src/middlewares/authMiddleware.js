@@ -9,13 +9,12 @@ export const checkAuth = (req, res, next) => {
       req.userId = userId
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        res.status(401).json({ message: 'Access token expired' })
-      } else {
-        res.status(500).json({ message: error.message })
+        return res.status(401).json({ message: 'Access token expired' })
       }
+      return res.status(500).json({ message: error.message })
     }
   } else {
-    res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ message: 'Unauthorized' })
   }
   return next()
 }

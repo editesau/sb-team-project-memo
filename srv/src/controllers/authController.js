@@ -1,4 +1,6 @@
-import { dbCreateUser, dbLoginUser, dbSetRefreshToken } from '../db/dbActions.js'
+import {
+  dbClearRefreshToken, dbCreateUser, dbLoginUser, dbSetRefreshToken,
+} from '../db/dbActions.js'
 import { createAccessToken, createRefreshToken } from '../services/jwtService.js'
 
 /** Create user with parameters provided in request body in JSON
@@ -46,5 +48,14 @@ export const userLogin = async (req, res) => {
 }
 
 export const userLogout = async (req, res) => {
-
+  try {
+    const dbResult = await dbClearRefreshToken(req.userId)
+    if (dbResult) {
+      res.clearCookie('access_token').clearCookie('refresh_token').status(200).json({ message: 'Successfully logout' })
+    } else {
+      res.status(400).json({ message: 'Bad request' })
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
