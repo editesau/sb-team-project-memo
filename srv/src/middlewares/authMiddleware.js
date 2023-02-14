@@ -2,8 +2,11 @@ import TokenExpiredError from 'jsonwebtoken/lib/TokenExpiredError.js'
 import { checkToken } from '../services/jwtService.js'
 
 export const checkAuth = (req, res, next) => {
-  const { access_token: accessToken, refresh_token: refreshToken } = req.cookies
-  if (accessToken && refreshToken) {
+  if (!req.headers.authorization) {
+    return res.sendStatus(401)
+  }
+  const accessToken = req.headers.authorization.split(' ')[1]
+  if (accessToken) {
     try {
       const { userId } = checkToken(accessToken)
       req.userId = userId
@@ -14,7 +17,7 @@ export const checkAuth = (req, res, next) => {
       return res.status(500).json({ message: error.message })
     }
   } else {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.sendStatus(401)
   }
   return next()
 }
@@ -33,7 +36,7 @@ export const checkRefreshToken = (req, res, next) => {
       return res.status(500).json({ message: error.message })
     }
   } else {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.sendStatus(401)
   }
   return next()
 }

@@ -35,10 +35,10 @@ export const userLogin = async (req, res) => {
       const accessToken = createAccessToken({ userId })
       const refreshToken = createRefreshToken({ userId })
       await dbSetRefreshToken(userId, refreshToken)
-      res.cookie('access_token', accessToken, { httpOnly: true })
+      res
         .cookie('refresh_token', refreshToken, { httpOnly: true })
         .status(200)
-        .json({ message: 'Successfully login' })
+        .json({ accessToken })
     } else {
       res.status(400).json({ message: 'Incorrect email or password' })
     }
@@ -52,11 +52,10 @@ export const userLogout = async (req, res) => {
     const dbResult = await dbClearRefreshToken(req.userId)
     if (dbResult) {
       res
-        .clearCookie('access_token')
         .clearCookie('refresh_token')
         .status(200).json({ message: 'Successfully logout' })
     } else {
-      res.status(400).json({ message: 'Bad request' })
+      res.sendStatus(400)
     }
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -71,12 +70,12 @@ export const userAuthRefresh = async (req, res) => {
       const accessToken = createAccessToken({ userId })
       const refreshToken = createRefreshToken({ userId })
       await dbSetRefreshToken(userId, refreshToken)
-      res.cookie('access_token', accessToken, { httpOnly: true })
+      res
         .cookie('refresh_token', refreshToken, { httpOnly: true })
         .status(200)
-        .json({ message: 'Tokens updated' })
+        .json({ accessToken })
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.sendStatus(401)
     }
   } catch (error) {
     res.status(500).json({ message: error.message })

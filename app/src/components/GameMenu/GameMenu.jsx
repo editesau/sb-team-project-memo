@@ -3,17 +3,21 @@ import { useMutation } from '@tanstack/react-query'
 import styles from './gameMenu.module.scss'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
+import { useUserStore } from '../../store/userStore/useUserStore.js'
 
 export const GameMenu = () => {
   const navigate = useNavigate()
+  const clearAccessToken = useUserStore((state) => state.clearAccessToken)
   const { mutate: logoutMutate } = useMutation({
     mutationFn: api.signOut,
     onSuccess: () => {
+      clearAccessToken()
+      api.clearToken()
       notifySuccess('Logout successful')
       navigate('/signin')
     },
     onError: (res) => {
-      notifyError(`Logout error, ${res.message}`)
+      notifyError(res.message)
     },
   })
 
