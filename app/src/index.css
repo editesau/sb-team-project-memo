@@ -26,10 +26,15 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  display: flex;
+  /* place-items: center center; */
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(to bottom, #0f0c29, #5D0E9F, #24243e);
 }
 
 h1 {
