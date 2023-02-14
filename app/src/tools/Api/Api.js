@@ -1,4 +1,6 @@
 import ky from 'ky'
+import jwt_decode from 'jwt-decode'
+import { getTokenFromLS, setTokenToLS } from '../helpers/helperFunctions.js'
 
 const kyGetErrorMessage = {
   beforeError: [
@@ -18,14 +20,6 @@ const kyGetErrorMessage = {
   ],
 }
 
-const getTokenFromLS = () => {
-  const tokenLS = window.localStorage.getItem('access_token')
-  if (tokenLS) {
-    return JSON.parse(tokenLS).state.accessToken
-  }
-  return null
-}
-
 class Api {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
@@ -33,9 +27,16 @@ class Api {
       'Content-Type': 'application/json',
     }
     this.kyInstance = ky.create({ headers: this.headers, hooks: kyGetErrorMessage })
+
     this.checkAndRenewToken = async (request) => {
-      const { accessToken } = await ky.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' }).json()
-      request.headers.set('Authorization', `Bearer ${accessToken}`)
+      let { exp } = jwt_decode(this.accessToken)
+      const now = Date.now()
+      exp *= 1e3
+      if (exp <= now) {
+        const { accessToken } = await this.refreshTokens()
+        request.headers.set('Authorization', `Bearer ${accessToken}`)
+        this.setToken(accessToken)
+      }
     }
     this.accessToken = getTokenFromLS()
     this.authHeaders = this.accessToken ? {
@@ -58,13 +59,19 @@ class Api {
       Authorization: `Bearer ${token}`,
     }
 
-    this.kyAuthInstance = ky.create({ headers: this.authHeaders, credentials: 'include', hooks: { ...kyGetErrorMessage, beforeRequest: [this.checkAndRenewToken] } })
+    this.kyAuthInstance = ky.create({
+      headers: this.authHeaders,
+      credentials: 'include',
+      hooks: { ...kyGetErrorMessage, beforeRequest: [this.checkAndRenewToken] },
+    })
+    setTokenToLS(this.accessToken)
   }
 
   clearToken = () => {
     this.accessToken = null
     this.authHeaders = null
     this.kyAuthInstance = null
+    setTokenToLS('')
   }
 
   signUp = (signUpData) => this.kyInstance.post(
@@ -78,6 +85,8 @@ class Api {
   )
 
   signOut = () => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/auth/signout`)
+
+  refreshTokens = async () => ky.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' }).json()
 }
 
 const api = new Api('http://localhost:5050')

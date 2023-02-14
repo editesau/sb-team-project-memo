@@ -1,12 +1,10 @@
 import { ToastContainer } from 'react-toastify'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { GameMenu } from './components/GameMenu/GameMenu.jsx'
-import { SignIn } from './components/SignIn/SignIn.jsx'
-import { useUserStore } from './store/userStore/useUserStore.js'
+import { getTokenFromLS } from './tools/helpers/helperFunctions.js'
 
 const App = () => {
   const location = useLocation()
-  const token = useUserStore((state) => state.accessToken)
+  const token = getTokenFromLS()
   if (location.pathname === '/' && token) return <Navigate to="/menu" />
   if (location.pathname !== '/signin' && location.pathname !== '/signup' && !token) return <Navigate to="/signin" />
   return (

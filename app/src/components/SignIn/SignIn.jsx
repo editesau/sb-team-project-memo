@@ -8,16 +8,13 @@ import styles from './signin.module.scss'
 import { validationSchemaSignIn } from './validationSchema/validationSchema'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
-import { useUserStore } from '../../store/userStore/useUserStore.js'
 
 export const SignIn = () => {
   const navigate = useNavigate()
-  const setAccessToken = useUserStore((state) => state.setAccessToken)
   const { mutate, isLoading } = useMutation({
     mutationFn: (signInData) => api.signIn(signInData),
     onSuccess: async (res) => {
       const { accessToken } = await res.json()
-      setAccessToken(accessToken)
       api.setToken(accessToken)
       notifySuccess('Login successful')
       navigate('/menu')

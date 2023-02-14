@@ -3,21 +3,24 @@ import { useMutation } from '@tanstack/react-query'
 import styles from './gameMenu.module.scss'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
-import { useUserStore } from '../../store/userStore/useUserStore.js'
 
 export const GameMenu = () => {
   const navigate = useNavigate()
-  const clearAccessToken = useUserStore((state) => state.clearAccessToken)
   const { mutate: logoutMutate } = useMutation({
     mutationFn: api.signOut,
     onSuccess: () => {
-      clearAccessToken()
       api.clearToken()
       notifySuccess('Logout successful')
       navigate('/signin')
     },
     onError: (res) => {
-      notifyError(res.message)
+      if (res.response.status === 401) {
+        api.clearToken()
+        notifyError('Your session was expired, please sign in again.')
+        navigate('/signin')
+      } else {
+        notifyError(res.message)
+      }
     },
   })
 
