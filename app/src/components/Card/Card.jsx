@@ -2,7 +2,7 @@
 import styles from './card.module.scss'
 
 export const Card = ({
-  image, card, handleCardClick,
+  picture, card, handleCardClick, countCard,
 }) => (
   <div
     className={styles.containerImg}
@@ -10,6 +10,14 @@ export const Card = ({
     onKeyDown={() => handleCardClick(card)}
     disabled={card.isOpen}
   >
-    <img className={styles.img} src={image} alt="logo" />
+    <img
+      className={`
+        ${countCard === 12 && styles.imgMiddleVersion}
+        ${countCard < 12 && styles.imgEasyVersion}
+        ${countCard > 12 && styles.imgHardVersion}
+    `}
+      src={picture}
+      alt="logo"
+    />
   </div>
 )
