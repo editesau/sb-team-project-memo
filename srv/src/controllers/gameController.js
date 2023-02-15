@@ -32,8 +32,15 @@ export const turnCard = async (req, res) => {
   const gameId = req.params.gameId
   const cardId = req.params.cardId
   const userId = req.userId
-
-  const game = await dbTurnCard(userId, gameId, cardId)
-  const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
-  res.json(cardToReturn)
+  try {
+    const game = await dbTurnCard(userId, gameId, cardId)
+    if (game) {
+      const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
+      res.json(cardToReturn)
+    } else {
+      res.status(400).json({ message: 'Cant find data' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
 }
