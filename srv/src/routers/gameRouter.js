@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { testFunc } from '../controllers/gameController.js'
+import { getCards, startGame, turnCard } from '../controllers/gameController.js'
+import { checkAuth } from '../middlewares/authMiddleware.js'
 
 export const gameRouter = new Router()
 
-gameRouter.get('/:gameId/cards', testFunc)
-gameRouter.post('/:gameId/start')
-gameRouter.post('/:gameId/turn/:cardId')
+gameRouter.get('/:gameId/cards', checkAuth, getCards)
+gameRouter.post('/start', checkAuth, startGame)
+gameRouter.post('/:gameId/turn/:cardId', checkAuth, turnCard)
 gameRouter.post('/:gameId/restart')

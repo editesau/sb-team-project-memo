@@ -2,11 +2,10 @@ import * as fs from 'fs'
 import { v4 as uuid } from 'uuid'
 import { imagesPath } from './constants.js'
 
-export const getImagesFiles = (gameType = 'animals') => fs.readdirSync(imagesPath + gameType)
-export const generateCards = (size = 10, gameType = 'animals') => {
+const getImagesFiles = (gameType = 'animals') => fs.readdirSync(imagesPath + gameType)
+export const generateCards = (size = 10, gameType = 'cartoons') => {
   const pictures = getImagesFiles(gameType).slice(0, size / 2)
   const cardImages = [...pictures, ...pictures]
-  console.log(cardImages)
   cardImages.sort(() => Math.random() - 0.5)
   const cards = []
   for (let i = 0; i < size; i++) {
@@ -17,6 +16,21 @@ export const generateCards = (size = 10, gameType = 'animals') => {
       isMatched: false,
     })
   }
-  console.log(cardImages)
   return cards
 }
+
+export const filterCards = (cards) => cards.map((card) => {
+  if (card.isOpen) return card
+  const { picture, ...returnedCard } = card
+  return returnedCard
+})
+
+export const turnCard = (cards, cardId) => cards.map((card) => {
+  if (!card.isOpen && card.id === cardId) {
+    return {
+      ...card,
+      isOpen: true,
+    }
+  }
+  return card
+})

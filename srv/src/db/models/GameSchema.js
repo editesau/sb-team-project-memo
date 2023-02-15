@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 
 const GameSchema = new mongoose.Schema({
   state: { type: String, default: 'In progress' },
-  cards: { type: [Object], default: [] },
-  userId: { type: String },
+  cards: { type: [Object], required: true },
+  userId: { type: String, required: true },
 })
 
 export default GameSchema
