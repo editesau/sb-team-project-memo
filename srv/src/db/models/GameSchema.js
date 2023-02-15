@@ -10,7 +10,7 @@ export default GameSchema
 /*
 card Object {
 id - random,
-picture - card opened picture
+picture - card opened picture url
 isOpen - boolean
 isMathced - boolean
 }
