@@ -30,9 +30,9 @@ body {
   min-height: 100vh;
 
   display: flex;
-  /* place-items: center center; */
   justify-content: center;
   align-items: center;
+    /* place-items: center center; */
 
   background: linear-gradient(to bottom, #0f0c29, #5D0E9F, #24243e);
 }

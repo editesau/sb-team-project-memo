@@ -55,8 +55,7 @@ export const useGameBoard = () => {
     setOpenedCards([...openedCards, {
       ...card,
       isOpen: true,
-    },
-    ])
+    }])
   }
 
   return {

@@ -14,21 +14,25 @@ export const GameBoard = () => {
   } = useGameBoard()
 
   return (
-    <div className={countCard === 12 ? styles.containerMediumVersion : styles.container}>
+    <div className={`
+    ${countCard === 12 && styles.containerMediumVersion}
+    ${countCard < 12 && styles.containerEasyVersion}
+    ${countCard > 12 && styles.containerHardVersion}`}
+    >
       <div className={`
-      ${countCard === 12 && styles.containerItemMediumVersion}
-      ${countCard < 12 && styles.containerItemEasyVersion}
-      ${countCard > 12 && styles.containerItemHardVersion}`}
+        ${countCard === 12 && styles.containerItemMediumVersion}
+        ${countCard < 12 && styles.containerItemEasyVersion}
+        ${countCard > 12 && styles.containerItemHardVersion}`}
       >
         {cards.map((card) => (
           <Card
             key={card.number}
             card={card}
-            image={card.isOpen || card.isMatched ? card.logo : shirt}
+            picture={card.isOpen || card.isMatched ? card.picture : shirt}
             handleCardClick={handleCardClick}
+            countCard={countCard}
           />
         ))}
-
       </div>
     </div>
   )
