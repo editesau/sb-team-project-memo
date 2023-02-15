@@ -6,26 +6,40 @@ export const useGameBoard = () => {
   const [openedCards, setOpenedCards] = useState([])
   const countCard = cards.length
 
+  // На основе массива из БД, создает новый массив с картами, сортирует и добавляет еще два значения
   useEffect(() => {
     const newCards = [...cardsFromBD]
       .sort(() => Math.random() - 0.5)
-      .map((card) => ({ ...card, isOpen: false, isMatched: false }))
+      .map((card) => ({ ...card, isOpen: true, isMatched: false }))
 
     setCards(newCards)
   }, [])
 
+  // При первом рендеринге держит карты открытими n-секунд, далее закрывает - isOpen: false
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCards((prevCards) => prevCards.map(((card) => ({ ...card, isOpen: false }))))
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Механизм совпадения/несовпадения карт
   useEffect(() => {
     if (openedCards.length === 2) {
       const [firstCard, secondCard] = openedCards
 
-      if (firstCard.id === secondCard.id) { // если id одинаковые, то isMatched -
-        setCards(cards.map((card) => { // - в true для обоих карт и они останутся открытыми
+      // если id одинаковые, то isMatched - в true для обоих карт и они останутся открытыми
+      if (firstCard.id === secondCard.id) {
+        setCards(cards.map((card) => { //
           if (card.id === firstCard.id || card.id === secondCard.id) {
             return { ...card, isMatched: true }
           }
           return card
         }))
-      } else { // если id разные, то значение isOpen в false и карты перевернутся обратно
+
+        // если id разные, то значение isOpen в false и карты перевернутся обратно
+      } else {
         setCards(cards.map((card) => {
           if (card.id === firstCard.id || card.id === secondCard.id) {
             return { ...card, isOpen: false }
@@ -33,6 +47,7 @@ export const useGameBoard = () => {
           return card
         }))
       }
+
       // если массив открытых карт (openedCards) имеет две карты, то массив очищается
       setOpenedCards([])
     }
@@ -42,20 +57,20 @@ export const useGameBoard = () => {
     if (card.isMatched || openedCards.length === 2) {
       return
     }
-
-    setCards(
-      cards.map((c) => {
-        if (c.number === card.number && c.id === card.id) {
-          return { ...c, isOpen: true }
-        }
-        return c
-      }),
-    )
-
-    setOpenedCards([...openedCards, {
-      ...card,
-      isOpen: true,
-    }])
+    setTimeout(() => {
+      setCards(
+        cards.map((c) => {
+          if (c.number === card.number && c.id === card.id) {
+            return { ...c, isOpen: true }
+          }
+          return c
+        }),
+      )
+      setOpenedCards([...openedCards, {
+        ...card,
+        isOpen: true,
+      }])
+    }, 0)
   }
 
   return {
