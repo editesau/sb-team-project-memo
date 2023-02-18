@@ -1,5 +1,7 @@
 import { filterCards, generateCards } from '../helpers/gameLogic/gameLogicFunctions.js'
-import { dbCreateGame, dbGetGameCards, dbTurnCard } from '../db/dbActions.js'
+import {
+  dbCreateGame, dbGetGameCards, dbSetMatched, dbTurnCard,
+} from '../db/dbActions.js'
 
 export const getCards = async (req, res) => {
   const gameId = req.params.gameId
@@ -37,6 +39,23 @@ export const turnCard = async (req, res) => {
     if (game) {
       const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
       res.json(cardToReturn)
+    } else {
+      res.status(400).json({ message: 'Cant find data' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const setMatched = async (req, res) => {
+  const gameId = req.params.gameId
+  const userId = req.userId
+  const cardIds = req.body.cardIds
+
+  try {
+    const game = await dbSetMatched(userId, gameId, cardIds)
+    if (game) {
+      res.sendStatus(200)
     } else {
       res.status(400).json({ message: 'Cant find data' })
     }

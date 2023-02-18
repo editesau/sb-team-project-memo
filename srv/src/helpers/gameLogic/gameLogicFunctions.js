@@ -20,7 +20,7 @@ export const generateCards = (size = 10, gameType = 'cartoons') => {
 }
 
 export const filterCards = (cards) => cards.map((card) => {
-  if (card.isOpen) return card
+  if (card.isOpen || card.isMatched) return card
   const { picture, ...returnedCard } = card
   return returnedCard
 })
@@ -30,6 +30,18 @@ export const turnCard = (cards, cardId) => cards.map((card) => {
     return {
       ...card,
       isOpen: true,
+    }
+  }
+  return card
+})
+
+export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
+  console.log(cardIds)
+  if (card.isOpen && cardIds.includes(card.id)) {
+    return {
+      ...card,
+      isOpen: false,
+      isMatched: true,
     }
   }
   return card
