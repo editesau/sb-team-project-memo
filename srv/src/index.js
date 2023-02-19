@@ -15,6 +15,7 @@ import {
 } from './helpers/constants.js'
 import { authRouter } from './routers/authRouter.js'
 import { gameRouter } from './routers/gameRouter.js'
+import { checkAuth } from './middlewares/authMiddleware.js'
 
 const app = express()
 
@@ -28,7 +29,7 @@ app.use(cookieParser())
 
 app.use(`/api/v${API_VERSION}/auth`, authRouter)
 app.use(`/api/v${API_VERSION}/game`, gameRouter)
-
+app.use('/resources/cards/images', checkAuth, express.static('resources/cards'))
 const startApp = async () => {
   try {
     const mongoConnectionString = genConnectionString(MONGO_HOST, MONGO_PORT)

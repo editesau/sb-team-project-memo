@@ -3,6 +3,7 @@ import App from '../App'
 import { SignIn } from '../components/SignIn/SignIn.jsx'
 import { SignUp } from '../components/SignUp/SignUp.jsx'
 import { GameMenu } from '../components/GameMenu/GameMenu.jsx'
+import { GameBoard } from '../components/GameBoard/GameBoard.jsx'
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: 'menu',
         element: <GameMenu />,
+      },
+      {
+        path: 'game',
+        element: <GameBoard />,
       },
     ],
   },

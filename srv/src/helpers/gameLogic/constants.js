@@ -1,2 +1,2 @@
-export const imagesPath = '/Users/amorozov/WebstormProjects/sb-team-project-memo/srv/resources/cards/'
+export const imagesPath = `${process.cwd()}/resources/cards/`
 const ANIMALS_GAME = 'animals'

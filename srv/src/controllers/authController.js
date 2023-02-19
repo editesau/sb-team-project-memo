@@ -17,9 +17,10 @@ export const userCreate = async (req, res) => {
   try {
     const result = await dbCreateUser({ email, password, userName })
     const { refreshToken, password: _, ...userData } = result._doc
-    res.status(200).json(userData)
+    res.status(201).json(userData)
   } catch (dbError) {
     if (dbError.message.indexOf('duplicate') !== -1) {
+      console.log(dbError)
       res.status(409).json({ message: 'User already exists' })
     } else {
       res.status(500).json({ message: dbError.message })
