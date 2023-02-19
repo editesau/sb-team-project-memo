@@ -5,6 +5,8 @@ import {
   MONGO_CA_PATH, MONGO_CLIENT_CRT_PATH,
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
+import GameSchema from './models/GameSchema.js'
+import { setMatchedCards, turnCard } from '../helpers/gameLogic/gameLogicFunctions.js'
 
 /** Function to generate mongoDB connection URL
  *@param host {string} IP address or DNS hostname
@@ -78,7 +80,33 @@ export const dbClearRefreshToken = (userId) => {
  *@param userId {string} mongoDB userID
  *@return {Promise} mongoDB .findById promise
  */
-export const dbGetUser = async (userId) => {
+export const dbGetUser = (userId) => {
   const User = mongoose.model('users', UserSchema)
   return User.findById(userId)
+}
+
+export const dbCreateGame = (userId, cards) => {
+  const Game = mongoose.model('games', GameSchema)
+  const newGame = Game({ userId, cards })
+  return newGame.save()
+}
+
+export const dbGetGameCards = (userId, gameId) => {
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOne({ _id: gameId, userId })
+}
+
+export const dbTurnCard = async (userId, gameId, cardId) => {
+  const game = await dbGetGameCards(userId, gameId)
+  const newCards = turnCard(game.cards, cardId)
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+}
+
+export const dbSetMatched = async (userId, gameId, cardIds) => {
+  const game = await dbGetGameCards(userId, gameId)
+  const newCards = setMatchedCards(game.cards, cardIds)
+  console.log(newCards)
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }
