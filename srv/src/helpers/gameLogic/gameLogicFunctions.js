@@ -46,3 +46,5 @@ export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   }
   return card
 })
+
+export const getTypesDir = () => fs.readdirSync(imagesPath)
