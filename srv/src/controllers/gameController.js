@@ -1,4 +1,4 @@
-import { filterCards, generateCards } from '../helpers/gameLogic/gameLogicFunctions.js'
+import { filterCards, generateCards, getTypesDir } from '../helpers/gameLogic/gameLogicFunctions.js'
 import {
   dbCreateGame, dbGetGameCards, dbSetMatched, dbTurnCard,
 } from '../db/dbActions.js'
@@ -61,5 +61,14 @@ export const setMatched = async (req, res) => {
     }
   } catch (dbError) {
     res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const getGameTypes = async (req, res) => {
+  try {
+    const types = getTypesDir()
+    res.json({ types })
+  } catch (error) {
+    res.status(500).json({ message: error })
   }
 }
