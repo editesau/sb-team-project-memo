@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import styles from './gameMenu.module.scss'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
+import { NewGame } from '../NewGame/NewGame'
 
 export const GameMenu = () => {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ export const GameMenu = () => {
   return (
     <div className={styles.container}>
       <div className={styles.main}>
-        <Link to="/game"> Play </Link>
+        <NewGame />
         <Link to="/options"> Settings </Link>
         <span
           role="presentation"
