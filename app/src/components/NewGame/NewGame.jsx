@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useQuery } from '@tanstack/react-query'
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import * as Yup from 'yup'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Loader } from '../Loader/Loader'
@@ -26,6 +27,17 @@ export const NewGame = () => {
     queryFn: getGameTypesFunc,
   })
 
+  const addGameId = useGameStore((state) => state.addGameId)
+
+  const { mutate: startGame } = useMutation({
+    mutationFn: api.getGameId,
+    onSuccess: async (response) => {
+      const dataFromBd = await response.json()
+      addGameId(dataFromBd)
+      localStorage.setItem('gameId', JSON.stringify(dataFromBd.gameId))
+    },
+  })
+
   const clickHandler = () => {
     setIsOpen(true)
   }
@@ -34,11 +46,13 @@ export const NewGame = () => {
     setIsOpen(false)
   }
 
-  const submitHandler = (values) => {
+  const submitHandler = () => {
     // здесь отправить запрос на бек
-    console.log(values)
-    navigate('/game')
-    closeHandler()
+    startGame()
+    setTimeout(() => {
+      navigate('/game')
+      closeHandler()
+    }, 150)
   }
 
   if (isLoading) return <Loader />

@@ -13,6 +13,7 @@ export const Card = ({
 }) => {
   const [picture, setPicture] = useState('')
 
+  // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
   const { mutate } = useMutation({
     mutationFn: async () => {
       const cardResponse = await api.turnCard(card.id).json()
@@ -26,6 +27,7 @@ export const Card = ({
     },
   })
 
+  // Получает и сохраняет картинку в стэйт picture
   useEffect(() => {
     async function getPicture() {
       if (card.isOpen) {
@@ -59,8 +61,7 @@ export const Card = ({
         ${countCard < 12 && styles.imgEasyVersion}
         ${countCard > 12 && styles.imgHardVersion}
     `}
-        src={card.isOpen || card.isMatched ? picture : shirt}
-        // src={(picture && card.isOpen) || (picture && card.isMatched) ? picture : shirt}
+        src={(card.isOpen && picture) || (card.isMatched && picture) ? picture : shirt}
         alt="logo"
       />
     </div>

@@ -9,14 +9,9 @@ export const GameBoard = () => {
   const {
     cards,
     countCard,
-    setCards,
     openedCards,
     setOpenedCards,
-    // isLoading,
-    // isFetching,
   } = useGameBoard()
-
-  //   if (isLoading || isFetching) return <div>isLoading</div>
 
   return (
     <div className={`
@@ -33,9 +28,7 @@ export const GameBoard = () => {
           <Card
             key={card.id}
             card={card}
-            cards={cards}
             countCard={countCard}
-            setCards={setCards}
             openedCards={openedCards}
             setOpenedCards={setOpenedCards}
           />
