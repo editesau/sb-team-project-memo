@@ -1,5 +1,4 @@
 /* eslint-disable import/no-relative-packages */
-import shirt from '../../../../srv/resources/shirt/shirt_1.png'
 import styles from './gameBoard.module.scss'
 import { Card } from '../Card/Card.jsx'
 import { useGameBoard } from './hooks/useGameBoard'
@@ -10,8 +9,14 @@ export const GameBoard = () => {
   const {
     cards,
     countCard,
-    handleCardClick,
+    setCards,
+    openedCards,
+    setOpenedCards,
+    // isLoading,
+    // isFetching,
   } = useGameBoard()
+
+  //   if (isLoading || isFetching) return <div>isLoading</div>
 
   return (
     <div className={`
@@ -26,11 +31,13 @@ export const GameBoard = () => {
       >
         {cards.map((card) => (
           <Card
-            key={card.number}
+            key={card.id}
             card={card}
-            picture={card.isOpen || card.isMatched ? card.picture : shirt}
-            handleCardClick={handleCardClick}
+            cards={cards}
             countCard={countCard}
+            setCards={setCards}
+            openedCards={openedCards}
+            setOpenedCards={setOpenedCards}
           />
         ))}
       </div>

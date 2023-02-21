@@ -40,7 +40,7 @@ export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   if (card.isOpen && cardIds.includes(card.id)) {
     return {
       ...card,
-      isOpen: false,
+      isOpen: true,
       isMatched: true,
     }
   }
