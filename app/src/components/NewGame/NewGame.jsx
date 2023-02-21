@@ -1,15 +1,30 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import { useQuery } from '@tanstack/react-query'
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
+import * as Yup from 'yup'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import api from '../../tools/Api/Api'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
+import { Loader } from '../Loader/Loader'
 import { Modal } from '../Modal/Modal'
 import styles from './newGame.module.scss'
 
 export const NewGame = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
+  const getGameTypesFunc = () => api.getGameTypes().then((res) => res.json())
+
+  const {
+    data, isLoading,
+  } = useQuery({
+    queryKey: ['gameType'],
+    queryFn: getGameTypesFunc,
+  })
 
   const clickHandler = () => {
     setIsOpen(true)
@@ -19,22 +34,33 @@ export const NewGame = () => {
     setIsOpen(false)
   }
 
-  const submitHandler = () => {
-    // console.log(values)
+  const submitHandler = (values) => {
+    // здесь отправить запрос на бек
+    console.log(values)
     navigate('/game')
     closeHandler()
   }
+
+  if (isLoading) return <Loader />
+
   return (
     <div className={styles.wr}>
-      <MemoButton text="Новая игра" clickHandler={clickHandler} />
+      <div className={styles.link} onClick={clickHandler}>
+        <Link onClick={clickHandler}> New Game </Link>
+      </div>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.wr_start}>
-          <h2>Выбрать уровень сложности</h2>
+          <h2>Настройки игры</h2>
           <Formik
             initialValues={{
               level: '',
+              types: '',
             }}
-            onSubmit={submitHandler}
+            validationSchema={Yup.object({
+              level: Yup.string().required('Необходимо выбрать уровень сложности'),
+              types: Yup.string().required('Необходимо выбрать тему'),
+            })}
+            onSubmit={(values) => submitHandler(values)}
           >
             <Form className={styles.editForm}>
               <Field className={styles.select} name="level" placeholder="Выберете уровень сложности" as="select">
@@ -44,6 +70,11 @@ export const NewGame = () => {
                 <option value="14">Сложный</option>
               </Field>
               <ErrorMessage component="span" className={styles.error} name="level" />
+              <Field className={styles.select} name="types" placeholder="Выберете тему" as="select">
+                <option disabled value="">Выбрать тему</option>
+                {data.types.map((el, i) => <option key={i} value={el}>{el}</option>)}
+              </Field>
+              <ErrorMessage component="span" className={styles.error} name="types" />
               <MemoButton text="Начать игру" type="submit" />
             </Form>
           </Formik>
