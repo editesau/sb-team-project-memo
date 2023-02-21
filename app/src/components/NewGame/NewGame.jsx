@@ -46,7 +46,7 @@ export const NewGame = () => {
   return (
     <div className={styles.wr}>
       <div className={styles.link} onClick={clickHandler}>
-        <Link onClick={clickHandler}> New Game </Link>
+        <span onClick={clickHandler}> New Game </span>
       </div>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.wr_start}>
