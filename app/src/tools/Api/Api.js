@@ -87,6 +87,8 @@ class Api {
   signOut = () => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/auth/signout`)
 
   refreshTokens = async () => ky.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' }).json()
+
+  getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
 }
 
 const api = new Api('http://localhost:5050')
