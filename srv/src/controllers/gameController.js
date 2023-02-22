@@ -21,7 +21,9 @@ export const getCards = async (req, res) => {
 
 export const startGame = async (req, res) => {
   const userId = req.userId
-  const cards = generateCards(10, 'animals')
+  const size = req.body.level
+  const gameType = req.body.gameType
+  const cards = generateCards(+size, gameType)
   try {
     const game = await dbCreateGame(userId, cards)
     res.json({ gameId: game._id })

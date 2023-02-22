@@ -89,6 +89,27 @@ class Api {
   refreshTokens = async () => ky.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' }).json()
 
   getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
+
+  getGameId = (level, types) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/start`, { json: { level: `${level}`, gameType: `${types}` } })
+
+  getCards = () => {
+    const gameId = JSON.parse(localStorage.getItem('gameId'))
+    return this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/${gameId}/cards`)
+  }
+
+  turnCard = (cardId) => {
+    const gameId = JSON.parse(localStorage.getItem('gameId'))
+    return this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/turn/${cardId}`)
+  }
+
+  getImage = (imgName, gameType) => this.kyAuthInstance.get(`${this.baseUrl}/resources/cards/images/${gameType}/${imgName}`, {
+    responseType: 'arraybuffer',
+  })
+
+  matchCards = (isMatchedCards) => {
+    const gameId = JSON.parse(localStorage.getItem('gameId'))
+    return this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/match`, { json: { cardIds: `${isMatchedCards}` } })
+  }
 }
 
 const api = new Api('http://localhost:5050')

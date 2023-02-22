@@ -1,5 +1,4 @@
 /* eslint-disable import/no-relative-packages */
-import shirt from '../../../../srv/resources/shirt/shirt_1.png'
 import styles from './gameBoard.module.scss'
 import { Card } from '../Card/Card.jsx'
 import { useGameBoard } from './hooks/useGameBoard'
@@ -10,7 +9,8 @@ export const GameBoard = () => {
   const {
     cards,
     countCard,
-    handleCardClick,
+    openedCards,
+    setOpenedCards,
   } = useGameBoard()
 
   return (
@@ -26,11 +26,11 @@ export const GameBoard = () => {
       >
         {cards.map((card) => (
           <Card
-            key={card.number}
+            key={card.id}
             card={card}
-            picture={card.isOpen || card.isMatched ? card.picture : shirt}
-            handleCardClick={handleCardClick}
             countCard={countCard}
+            openedCards={openedCards}
+            setOpenedCards={setOpenedCards}
           />
         ))}
       </div>

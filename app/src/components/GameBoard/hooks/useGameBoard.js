@@ -1,81 +1,52 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import { cardsFromBD } from '../cards'
+import { useQuery } from '@tanstack/react-query'
+import api from '../../../tools/Api/Api'
+import { useGameStore } from '../../../store/gameStore/useGameStore'
 
 export const useGameBoard = () => {
   const [cards, setCards] = useState([])
   const [openedCards, setOpenedCards] = useState([])
-  const countCard = cards.length
+  const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
-  // На основе массива из БД, создает новый массив с картами, сортирует и добавляет еще два значения
-  useEffect(() => {
-    const newCards = [...cardsFromBD]
-      .sort(() => Math.random() - 0.5)
-      .map((card) => ({ ...card, isOpen: true, isMatched: false }))
+  const gameId = useGameStore((state) => state.gameId)
 
-    setCards(newCards)
-  }, [])
-
-  // При первом рендеринге держит карты открытими n-секунд, далее закрывает - isOpen: false
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCards((prevCards) => prevCards.map(((card) => ({ ...card, isOpen: false }))))
-    }, 5000)
-
-    return () => clearTimeout(timer)
-  }, [])
+  // Получает массив с картами
+  const { isLoading, isFetching } = useQuery({
+    queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
+    queryFn: () => api.getCards()
+      .then((res) => res.json()),
+    onSuccess: (arrCards) => {
+      setCards(arrCards)
+    },
+  })
 
   // Механизм совпадения/несовпадения карт
   useEffect(() => {
     if (openedCards.length === 2) {
       const [firstCard, secondCard] = openedCards
 
-      // если id одинаковые, то isMatched - в true для обоих карт и они останутся открытыми
-      if (firstCard.id === secondCard.id) {
-        setCards(cards.map((card) => { //
-          if (card.id === firstCard.id || card.id === secondCard.id) {
-            return { ...card, isMatched: true }
-          }
-          return card
-        }))
-
-        // если id разные, то значение isOpen в false и карты перевернутся обратно
+      // Если картинки совпадают, то isMatched - true
+      if (firstCard.picture === secondCard.picture) {
+        const openedCardsIds = openedCards.map((card) => card.id)
+        api.matchCards(openedCardsIds)
       } else {
-        setCards(cards.map((card) => {
-          if (card.id === firstCard.id || card.id === secondCard.id) {
-            return { ...card, isOpen: false }
-          }
-          return card
-        }))
+        // если картинки не совпали, то запрос на сервер и isOpen - false
       }
 
-      // если массив открытых карт (openedCards) имеет две карты, то массив очищается
+      // Очищает массив открытых карт - openedCards, если в массиве две карты
       setOpenedCards([])
     }
   }, [openedCards])
 
-  const handleCardClick = (card) => {
-    if (card.isMatched || openedCards.length === 2) {
-      return
-    }
-    setTimeout(() => {
-      setCards(
-        cards.map((c) => {
-          if (c.number === card.number && c.id === card.id) {
-            return { ...c, isOpen: true }
-          }
-          return c
-        }),
-      )
-      setOpenedCards([...openedCards, {
-        ...card,
-        isOpen: true,
-      }])
-    }, 0)
-  }
-
   return {
+    gameId,
     cards,
     countCard,
-    handleCardClick,
+    setCards,
+    openedCards,
+    setOpenedCards,
+    isLoading,
+    isFetching,
   }
 }

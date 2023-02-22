@@ -7,6 +7,7 @@ import { NewGame } from '../NewGame/NewGame'
 
 export const GameMenu = () => {
   const navigate = useNavigate()
+
   const { mutate: logoutMutate } = useMutation({
     mutationFn: api.signOut,
     onSuccess: () => {

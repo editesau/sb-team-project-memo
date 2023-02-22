@@ -2,8 +2,9 @@ import * as fs from 'fs'
 import { v4 as uuid } from 'uuid'
 import { imagesPath } from './constants.js'
 
-const getImagesFiles = (gameType = 'animals') => fs.readdirSync(imagesPath + gameType)
-export const generateCards = (size = 10, gameType = 'cartoons') => {
+const getImagesFiles = (gameType) => fs.readdirSync(imagesPath + gameType)
+
+export const generateCards = (size, gameType) => {
   const pictures = getImagesFiles(gameType).slice(0, size / 2)
   const cardImages = [...pictures, ...pictures]
   cardImages.sort(() => Math.random() - 0.5)
@@ -40,7 +41,7 @@ export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   if (card.isOpen && cardIds.includes(card.id)) {
     return {
       ...card,
-      isOpen: false,
+      isOpen: true,
       isMatched: true,
     }
   }

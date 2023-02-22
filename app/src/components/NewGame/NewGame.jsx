@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useQuery } from '@tanstack/react-query'
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import * as Yup from 'yup'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Loader } from '../Loader/Loader'
@@ -17,6 +18,8 @@ import styles from './newGame.module.scss'
 export const NewGame = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
+  const changeGameType = useGameStore((state) => state.changeGameType)
+
   const getGameTypesFunc = () => api.getGameTypes().then((res) => res.json())
 
   const {
@@ -24,6 +27,17 @@ export const NewGame = () => {
   } = useQuery({
     queryKey: ['gameType'],
     queryFn: getGameTypesFunc,
+  })
+
+  const addGameId = useGameStore((state) => state.addGameId)
+
+  const { mutate: startGame } = useMutation({
+    mutationFn: (inputValues) => api.getGameId(inputValues.level, inputValues.gameType),
+    onSuccess: async (response) => {
+      const dataFromBd = await response.json()
+      addGameId(dataFromBd)
+      localStorage.setItem('gameId', JSON.stringify(dataFromBd.gameId))
+    },
   })
 
   const clickHandler = () => {
@@ -35,10 +49,13 @@ export const NewGame = () => {
   }
 
   const submitHandler = (values) => {
-    // здесь отправить запрос на бек
-    console.log(values)
-    navigate('/game')
-    closeHandler()
+    changeGameType(values.gameType)
+    localStorage.setItem('gameType', JSON.stringify(values.gameType))
+    startGame(values)
+    setTimeout(() => {
+      navigate('/game')
+      closeHandler()
+    }, 150)
   }
 
   if (isLoading) return <Loader />
@@ -54,11 +71,11 @@ export const NewGame = () => {
           <Formik
             initialValues={{
               level: '',
-              types: '',
+              gameType: '',
             }}
             validationSchema={Yup.object({
               level: Yup.string().required('Необходимо выбрать уровень сложности'),
-              types: Yup.string().required('Необходимо выбрать тему'),
+              gameType: Yup.string().required('Необходимо выбрать тему'),
             })}
             onSubmit={(values) => submitHandler(values)}
           >
@@ -67,10 +84,10 @@ export const NewGame = () => {
                 <option disabled value="">Уровень сложности</option>
                 <option value="10">Простой</option>
                 <option value="12">Средний</option>
-                <option value="14">Сложный</option>
+                <option value="18">Сложный</option>
               </Field>
               <ErrorMessage component="span" className={styles.error} name="level" />
-              <Field className={styles.select} name="types" placeholder="Выберете тему" as="select">
+              <Field className={styles.select} name="gameType" placeholder="Выберете тему" as="select">
                 <option disabled value="">Выбрать тему</option>
                 {data.types.map((el, i) => <option key={i} value={el}>{el}</option>)}
               </Field>
