@@ -90,7 +90,7 @@ class Api {
 
   getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
 
-  getGameId = () => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/start`)
+  getGameId = (level, types) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/start`, { json: { level: `${level}`, gameType: `${types}` } })
 
   getCards = () => {
     const gameId = JSON.parse(localStorage.getItem('gameId'))

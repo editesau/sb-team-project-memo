@@ -3,6 +3,7 @@
 import { QueryClient, useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import shirt from '../../../../srv/resources/shirt/shirt_1.png'
+import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import styles from './card.module.scss'
 
@@ -12,6 +13,7 @@ export const Card = ({
   card, countCard, openedCards, setOpenedCards,
 }) => {
   const [picture, setPicture] = useState('')
+  const gameType = useGameStore((state) => state.gameType)
 
   // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
   const { mutate } = useMutation({
@@ -31,7 +33,7 @@ export const Card = ({
   useEffect(() => {
     async function getPicture() {
       if (card.isOpen) {
-        const imgGetResponse = await api.getImage(card.picture, 'animals')
+        const imgGetResponse = await api.getImage(card.picture, gameType)
         const blob = await imgGetResponse.blob()
         const image = window.URL.createObjectURL(blob)
         return setPicture(image)

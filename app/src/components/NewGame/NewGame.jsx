@@ -18,6 +18,8 @@ import styles from './newGame.module.scss'
 export const NewGame = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
+  const changeGameType = useGameStore((state) => state.changeGameType)
+
   const getGameTypesFunc = () => api.getGameTypes().then((res) => res.json())
 
   const {
@@ -30,7 +32,7 @@ export const NewGame = () => {
   const addGameId = useGameStore((state) => state.addGameId)
 
   const { mutate: startGame } = useMutation({
-    mutationFn: api.getGameId,
+    mutationFn: (inputValues) => api.getGameId(inputValues.level, inputValues.gameType),
     onSuccess: async (response) => {
       const dataFromBd = await response.json()
       addGameId(dataFromBd)
@@ -46,9 +48,10 @@ export const NewGame = () => {
     setIsOpen(false)
   }
 
-  const submitHandler = () => {
-    // здесь отправить запрос на бек
-    startGame()
+  const submitHandler = (values) => {
+    changeGameType(values.gameType)
+    localStorage.setItem('gameType', JSON.stringify(values.gameType))
+    startGame(values)
     setTimeout(() => {
       navigate('/game')
       closeHandler()
@@ -68,11 +71,11 @@ export const NewGame = () => {
           <Formik
             initialValues={{
               level: '',
-              types: '',
+              gameType: '',
             }}
             validationSchema={Yup.object({
               level: Yup.string().required('Необходимо выбрать уровень сложности'),
-              types: Yup.string().required('Необходимо выбрать тему'),
+              gameType: Yup.string().required('Необходимо выбрать тему'),
             })}
             onSubmit={(values) => submitHandler(values)}
           >
@@ -81,10 +84,10 @@ export const NewGame = () => {
                 <option disabled value="">Уровень сложности</option>
                 <option value="10">Простой</option>
                 <option value="12">Средний</option>
-                <option value="14">Сложный</option>
+                <option value="18">Сложный</option>
               </Field>
               <ErrorMessage component="span" className={styles.error} name="level" />
-              <Field className={styles.select} name="types" placeholder="Выберете тему" as="select">
+              <Field className={styles.select} name="gameType" placeholder="Выберете тему" as="select">
                 <option disabled value="">Выбрать тему</option>
                 {data.types.map((el, i) => <option key={i} value={el}>{el}</option>)}
               </Field>
