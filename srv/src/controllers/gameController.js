@@ -1,6 +1,6 @@
 import { filterCards, generateCards, getTypesDir } from '../helpers/gameLogic/gameLogicFunctions.js'
 import {
-  dbCreateGame, dbGetGameCards, dbSetMatched, dbOpenCard,
+  dbCreateGame, dbGetGameCards, dbSetMatched, dbOpenCard, dbCloseCard,
 } from '../db/dbActions.js'
 
 export const getCards = async (req, res) => {
@@ -38,6 +38,23 @@ export const openCard = async (req, res) => {
   const userId = req.userId
   try {
     const game = await dbOpenCard(userId, gameId, cardId)
+    if (game) {
+      const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
+      res.json(cardToReturn)
+    } else {
+      res.status(400).json({ message: 'Cant find data' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const closeCard = async (req, res) => {
+  const gameId = req.params.gameId
+  const cardId = req.params.cardId
+  const userId = req.userId
+  try {
+    const game = await dbCloseCard(userId, gameId, cardId)
     if (game) {
       const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
       res.json(cardToReturn)

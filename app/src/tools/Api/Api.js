@@ -94,7 +94,7 @@ class Api {
 
   getCards = (gameId) => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/${gameId}/cards`)
 
-  turnCard = (gameId, cardId) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/turn/${cardId}`)
+  openCard = (gameId, cardId) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/open/${cardId}`)
 
   getImage = (imgName, gameType) => this.kyAuthInstance.get(`${this.baseUrl}/resources/cards/images/${gameType}/${imgName}`, {
     responseType: 'arraybuffer',

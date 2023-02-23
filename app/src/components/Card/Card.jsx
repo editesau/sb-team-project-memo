@@ -20,7 +20,7 @@ export const Card = ({
   // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const cardResponse = await api.turnCard(gameId, card.id).json()
+      const cardResponse = await api.openCard(gameId, card.id).json()
       return cardResponse
     },
     onSuccess: async (cardObj) => {
