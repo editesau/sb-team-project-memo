@@ -96,14 +96,13 @@ class Api {
 
   openCard = (gameId, cardId) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/open/${cardId}`)
 
+  closeCards = (gameId, cardIds) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/close`, { json: { cardIds } })
+
   getImage = (imgName, gameType) => this.kyAuthInstance.get(`${this.baseUrl}/resources/cards/images/${gameType}/${imgName}`, {
     responseType: 'arraybuffer',
   })
 
-  matchCards = (isMatchedCards) => {
-    const gameId = JSON.parse(localStorage.getItem('gameId'))
-    return this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/match`, { json: { cardIds: `${isMatchedCards}` } })
-  }
+  matchCards = (gameId, isMatchedCards) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/match`, { json: { cardIds: `${isMatchedCards}` } })
 }
 
 const api = new Api('http://localhost:5050')

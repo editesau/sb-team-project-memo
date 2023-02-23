@@ -18,7 +18,7 @@ export const Card = ({
   const gameType = useGameStore((state) => state.gameType)
 
   // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
-  const { mutate } = useMutation({
+  const { mutate: openCard } = useMutation({
     mutationFn: async () => {
       const cardResponse = await api.openCard(gameId, card.id).json()
       return cardResponse
@@ -48,7 +48,7 @@ export const Card = ({
     if (card.isMatched || openedCards.length === 2) {
       return
     }
-    mutate()
+    openCard()
   }
 
   return (

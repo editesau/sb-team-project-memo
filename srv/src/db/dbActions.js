@@ -6,7 +6,7 @@ import {
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
 import GameSchema from './models/GameSchema.js'
-import { setMatchedCards, openCard, closeCard } from '../helpers/gameLogic/gameLogicFunctions.js'
+import { setMatchedCards, openCard, closeCards } from '../helpers/gameLogic/gameLogicFunctions.js'
 
 /** Function to generate mongoDB connection URL
  *@param host {string} IP address or DNS hostname
@@ -103,9 +103,9 @@ export const dbOpenCard = async (userId, gameId, cardId) => {
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }
 
-export const dbCloseCard = async (userId, gameId, cardId) => {
+export const dbCloseCards = async (userId, gameId, cardIds) => {
   const game = await dbGetGameCards(userId, gameId)
-  const newCards = closeCard(game.cards, cardId)
+  const newCards = closeCards(game.cards, cardIds)
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }
@@ -113,7 +113,6 @@ export const dbCloseCard = async (userId, gameId, cardId) => {
 export const dbSetMatched = async (userId, gameId, cardIds) => {
   const game = await dbGetGameCards(userId, gameId)
   const newCards = setMatchedCards(game.cards, cardIds)
-  console.log(newCards)
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }

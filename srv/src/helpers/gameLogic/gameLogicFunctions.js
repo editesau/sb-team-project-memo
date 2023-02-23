@@ -36,8 +36,8 @@ export const openCard = (cards, cardId) => cards.map((card) => {
   return card
 })
 
-export const closeCard = (cards, cardId) => cards.map((card) => {
-  if (card.isOpen && card.id === cardId) {
+export const closeCards = (cards, cardIds) => cards.map((card) => {
+  if (card.isOpen && cardIds.includes(card.id)) {
     return {
       ...card,
       isOpen: false,
@@ -47,7 +47,6 @@ export const closeCard = (cards, cardId) => cards.map((card) => {
 })
 
 export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
-  console.log(cardIds)
   if (card.isOpen && cardIds.includes(card.id)) {
     return {
       ...card,

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import api from '../../../tools/Api/Api'
 
@@ -10,7 +10,7 @@ export const useGameBoard = () => {
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
   const { gameId } = useParams()
-
+  const queryClient = useQueryClient()
   // Получает массив с картами
   const { isLoading, isFetching } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
@@ -21,6 +21,17 @@ export const useGameBoard = () => {
     },
   })
 
+  const { mutate: matchCards } = useMutation({
+    mutationFn: (cardIds) => api.matchCards(gameId, cardIds),
+    onSuccess: () => {
+      setOpenedCards([])
+    },
+  })
+
+  const { mutate: closeCards } = useMutation({
+    mutationFn: (cardIds) => api.closeCards(gameId, cardIds),
+  })
+
   // Механизм совпадения/несовпадения карт
   useEffect(() => {
     if (openedCards.length === 2) {
@@ -29,13 +40,13 @@ export const useGameBoard = () => {
       // Если картинки совпадают, то isMatched - true
       if (firstCard.picture === secondCard.picture) {
         const openedCardsIds = openedCards.map((card) => card.id)
-        api.matchCards(openedCardsIds)
+        matchCards(openedCardsIds)
       } else {
-        // если картинки не совпали, то запрос на сервер и isOpen - false
+        closeCards(openedCards.map((card) => card.id))
       }
-
-      // Очищает массив открытых карт - openedCards, если в массиве две карты
-      setOpenedCards([])
+      setTimeout(() => {
+        setOpenedCards([])
+      }, 1000)
     }
   }, [openedCards])
 
