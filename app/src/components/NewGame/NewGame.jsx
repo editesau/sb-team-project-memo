@@ -30,16 +30,6 @@ export const NewGame = () => {
   })
 
   const addGameId = useGameStore((state) => state.addGameId)
-
-  const { mutate: startGame } = useMutation({
-    mutationFn: (inputValues) => api.getGameId(inputValues.level, inputValues.gameType),
-    onSuccess: async (response) => {
-      const dataFromBd = await response.json()
-      addGameId(dataFromBd)
-      localStorage.setItem('gameId', JSON.stringify(dataFromBd.gameId))
-    },
-  })
-
   const clickHandler = () => {
     setIsOpen(true)
   }
@@ -48,14 +38,20 @@ export const NewGame = () => {
     setIsOpen(false)
   }
 
+  const { mutate: startGame } = useMutation({
+    mutationFn: (inputValues) => api.getGameId(inputValues.level, inputValues.gameType),
+    onSuccess: async (response) => {
+      const dataFromBd = await response.json()
+      addGameId(dataFromBd)
+      navigate(`/game/${dataFromBd.gameId}`)
+      closeHandler()
+    },
+  })
+
   const submitHandler = (values) => {
     changeGameType(values.gameType)
     localStorage.setItem('gameType', JSON.stringify(values.gameType))
     startGame(values)
-    setTimeout(() => {
-      navigate('/game')
-      closeHandler()
-    }, 150)
   }
 
   if (isLoading) return <Loader />

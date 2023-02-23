@@ -26,7 +26,7 @@ export const filterCards = (cards) => cards.map((card) => {
   return returnedCard
 })
 
-export const turnCard = (cards, cardId) => cards.map((card) => {
+export const openCard = (cards, cardId) => cards.map((card) => {
   if (!card.isOpen && card.id === cardId) {
     return {
       ...card,

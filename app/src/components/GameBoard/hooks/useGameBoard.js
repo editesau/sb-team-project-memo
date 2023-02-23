@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 import api from '../../../tools/Api/Api'
-import { useGameStore } from '../../../store/gameStore/useGameStore'
 
 export const useGameBoard = () => {
   const [cards, setCards] = useState([])
   const [openedCards, setOpenedCards] = useState([])
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
-  const gameId = useGameStore((state) => state.gameId)
+  const { gameId } = useParams()
 
   // Получает массив с картами
   const { isLoading, isFetching } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
-    queryFn: () => api.getCards()
+    queryFn: () => api.getCards(gameId)
       .then((res) => res.json()),
     onSuccess: (arrCards) => {
       setCards(arrCards)

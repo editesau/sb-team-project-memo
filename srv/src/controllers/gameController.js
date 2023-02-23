@@ -1,6 +1,6 @@
 import { filterCards, generateCards, getTypesDir } from '../helpers/gameLogic/gameLogicFunctions.js'
 import {
-  dbCreateGame, dbGetGameCards, dbSetMatched, dbTurnCard,
+  dbCreateGame, dbGetGameCards, dbSetMatched, dbOpenCard,
 } from '../db/dbActions.js'
 
 export const getCards = async (req, res) => {
@@ -32,12 +32,12 @@ export const startGame = async (req, res) => {
   }
 }
 
-export const turnCard = async (req, res) => {
+export const openCard = async (req, res) => {
   const gameId = req.params.gameId
   const cardId = req.params.cardId
   const userId = req.userId
   try {
-    const game = await dbTurnCard(userId, gameId, cardId)
+    const game = await dbOpenCard(userId, gameId, cardId)
     if (game) {
       const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
       res.json(cardToReturn)

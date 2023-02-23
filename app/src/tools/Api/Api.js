@@ -92,15 +92,9 @@ class Api {
 
   getGameId = (level, types) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/start`, { json: { level: `${level}`, gameType: `${types}` } })
 
-  getCards = () => {
-    const gameId = JSON.parse(localStorage.getItem('gameId'))
-    return this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/${gameId}/cards`)
-  }
+  getCards = (gameId) => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/${gameId}/cards`)
 
-  turnCard = (cardId) => {
-    const gameId = JSON.parse(localStorage.getItem('gameId'))
-    return this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/turn/${cardId}`)
-  }
+  turnCard = (gameId, cardId) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/turn/${cardId}`)
 
   getImage = (imgName, gameType) => this.kyAuthInstance.get(`${this.baseUrl}/resources/cards/images/${gameType}/${imgName}`, {
     responseType: 'arraybuffer',
