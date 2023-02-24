@@ -102,6 +102,8 @@ class Api {
     responseType: 'arraybuffer',
   })
 
+  resetGame = (gameId) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/reset`)
+
   matchCards = (gameId, isMatchedCards) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/${gameId}/match`, { json: { cardIds: `${isMatchedCards}` } })
 }
 
