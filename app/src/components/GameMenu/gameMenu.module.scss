@@ -35,9 +35,9 @@
         transition:         transform .5s ease-in-out;
    
         &:hover{
-        box-shadow: 10px 5px 5px red;
-        -webkit-transform: rotate(360deg); /* Градусы поворота можно изменить по необходимости */
-          transform: rotate(360deg); /* Градусы поворота можно изменить по необходимости */
+        box-shadow: 10px 5px 5px #61dafb;
+        -webkit-transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
+          transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
         }
     }
 }
