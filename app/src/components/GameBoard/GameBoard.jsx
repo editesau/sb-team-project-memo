@@ -1,8 +1,8 @@
 /* eslint-disable import/no-relative-packages */
-import styles from './gameBoard.module.scss'
 import { Card } from '../Card/Card.jsx'
 import { useGameBoard } from './hooks/useGameBoard'
 import { GameFinished } from '../GameFinished/GameFinished.jsx'
+import { Loader } from '../Loader/Loader.jsx'
 
 // Режимы: easy - 5 пар (10 карт); medium - 6 пар (12 карт); hard - 9 пар (18 карт)
 
@@ -13,20 +13,15 @@ export const GameBoard = () => {
     openedCards,
     setOpenedCards,
     isFinished,
+    isLoading,
     setIsFinished,
+    getContainerStyle,
+    getContainerItemStyle,
   } = useGameBoard()
-
+  if (isLoading) return <Loader />
   return (
-    <div className={`
-    ${countCard === 12 && styles.containerMediumVersion}
-    ${countCard < 12 && styles.containerEasyVersion}
-    ${countCard > 12 && styles.containerHardVersion}`}
-    >
-      <div className={`
-        ${countCard === 12 && styles.containerItemMediumVersion}
-        ${countCard < 12 && styles.containerItemEasyVersion}
-        ${countCard > 12 && styles.containerItemHardVersion}`}
-      >
+    <div className={getContainerStyle()}>
+      <div className={getContainerItemStyle()}>
         {cards.map((card) => (
           <Card
             key={card.id}

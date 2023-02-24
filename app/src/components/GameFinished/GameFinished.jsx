@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Modal } from '../Modal/Modal'
 import styles from './gameFinished.module.scss'
@@ -11,12 +9,9 @@ import styles from './gameFinished.module.scss'
 export const GameFinished = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate()
 
-  const clickHandler = () => {
-    setIsOpen(true)
-  }
-
   const closeHandler = () => {
     setIsOpen(false)
+    navigate('/menu')
   }
 
   const buttonHandler = () => {
@@ -28,7 +23,7 @@ export const GameFinished = ({ isOpen, setIsOpen }) => {
     <div className={styles.wr}>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.gameOver}>
-          <h2>GAME OVER</h2>
+          <h2>Все пары найдены</h2>
           <MemoButton text="Начать сначала" />
           <MemoButton text="Выйти в меню" clickHandler={buttonHandler} />
         </div>

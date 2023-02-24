@@ -3,7 +3,7 @@
 import { QueryClient, useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import shirt from '../../../../srv/resources/shirt/shirt_1.png'
+import shirt from '../../resources/images/shirts/shirt_1.png'
 import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import styles from './card.module.scss'
@@ -16,7 +16,7 @@ export const Card = ({
   const [picture, setPicture] = useState('')
   const { gameId } = useParams()
   const gameType = useGameStore((state) => state.gameType)
-  const setCardStyle = () => {
+  const getCardStyle = () => {
     if (countCard > 12) return styles.imgHardVersion
     if (countCard < 12) return styles.imgEasyVersion
     return styles.imgMiddleVersion
@@ -64,7 +64,7 @@ export const Card = ({
       disabled={card.isOpen}
     >
       <img
-        className={setCardStyle()}
+        className={getCardStyle()}
         src={(card.isOpen && picture) || (card.isMatched && picture) ? picture : shirt}
         alt="logo"
       />

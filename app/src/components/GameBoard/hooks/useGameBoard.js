@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import api from '../../../tools/Api/Api'
+import styles from '../gameBoard.module.scss'
 
 export const useGameBoard = () => {
   const [cards, setCards] = useState([])
@@ -52,17 +53,27 @@ export const useGameBoard = () => {
       }, 1000)
     }
   }, [openedCards])
+  const getContainerStyle = () => {
+    if (countCard > 12) return styles.containerHardVersion
+    if (countCard < 12) return styles.containerEasyVersion
+    return styles.containerMediumVersion
+  }
 
+  const getContainerItemStyle = () => {
+    if (countCard > 12) return styles.containerItemHardVersion
+    if (countCard < 12) return styles.containerItemEasyVersion
+    return styles.containerItemMediumVersion
+  }
   return {
-    gameId,
     cards,
     countCard,
-    setCards,
     openedCards,
     setOpenedCards,
     isLoading,
     isFetching,
     isFinished,
     setIsFinished,
+    getContainerStyle,
+    getContainerItemStyle,
   }
 }
