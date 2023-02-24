@@ -6,6 +6,7 @@ import api from '../../../tools/Api/Api'
 
 export const useGameBoard = () => {
   const [cards, setCards] = useState([])
+  const [isFinished, setIsFinished] = useState(false)
   const [openedCards, setOpenedCards] = useState([])
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
@@ -34,7 +35,7 @@ export const useGameBoard = () => {
   // Механизм совпадения/несовпадения карт
   useEffect(() => {
     if (cards.every((card) => card.isMatched) && cards.length !== 0) {
-      console.log('You win')
+      setIsFinished(true)
     }
     if (openedCards.length === 2) {
       const [firstCard, secondCard] = openedCards
@@ -61,5 +62,7 @@ export const useGameBoard = () => {
     setOpenedCards,
     isLoading,
     isFetching,
+    isFinished,
+    setIsFinished,
   }
 }

@@ -8,9 +8,8 @@ import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Modal } from '../Modal/Modal'
 import styles from './gameFinished.module.scss'
 
-export const GameFinished = () => {
+export const GameFinished = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate()
-  const [isOpen, setIsOpen] = useState(false)
 
   const clickHandler = () => {
     setIsOpen(true)
@@ -27,9 +26,6 @@ export const GameFinished = () => {
 
   return (
     <div className={styles.wr}>
-      <div className={styles.link} onClick={clickHandler}>
-        <Link onClick={clickHandler}> Game over </Link>
-      </div>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.gameOver}>
           <h2>GAME OVER</h2>

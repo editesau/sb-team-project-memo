@@ -2,6 +2,7 @@
 import styles from './gameBoard.module.scss'
 import { Card } from '../Card/Card.jsx'
 import { useGameBoard } from './hooks/useGameBoard'
+import { GameFinished } from '../GameFinished/GameFinished.jsx'
 
 // Режимы: easy - 5 пар (10 карт); medium - 6 пар (12 карт); hard - 9 пар (18 карт)
 
@@ -11,6 +12,8 @@ export const GameBoard = () => {
     countCard,
     openedCards,
     setOpenedCards,
+    isFinished,
+    setIsFinished,
   } = useGameBoard()
 
   return (
@@ -34,6 +37,7 @@ export const GameBoard = () => {
           />
         ))}
       </div>
+      <GameFinished isOpen={isFinished} setIsOpen={setIsFinished} />
     </div>
   )
 }
