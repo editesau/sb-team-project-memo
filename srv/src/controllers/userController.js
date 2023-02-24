@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import { dbChangeUserPassword, dbGetUser } from '../db/dbActions.js'
+import { dbChangeUserPassword, dbGetUser, dbSetUserAvatar } from '../db/dbActions.js'
 
 export const userChangePassword = (req, res) => {
   const userId = req.userId
@@ -22,6 +22,22 @@ export const userChangePassword = (req, res) => {
       }
     } else {
       res.status(401).json({ message: 'Cant find user with provided ID' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const userSetAvatar = (req, res) => {
+  const userId = req.userId
+  const avatarUrl = req.body.avatarUrl
+
+  try {
+    const updatedUser = dbSetUserAvatar(userId, avatarUrl)
+    if (updatedUser) {
+      res.sendStatus(200)
+    } else {
+      res.status(400).json({ message: 'Filed to update a user' })
     }
   } catch (dbError) {
     res.status(500).json({ message: dbError.message })

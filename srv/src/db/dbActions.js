@@ -130,3 +130,8 @@ export const dbChangeUserPassword = async (userId, newPassword) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate(userId, { password: newPassword }, { new: true })
 }
+
+export const dbSetUserAvatar = async (userId, avatarUrl) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate(userId, { avatar: avatarUrl }, { new: true })
+}
