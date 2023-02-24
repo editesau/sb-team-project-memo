@@ -125,3 +125,8 @@ export const dbResetGame = async (userId, gameId) => {
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }
+
+export const dbChangeUserPassword = async (userId, newPassword) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate(userId, { password: newPassword }, { new: true })
+}
