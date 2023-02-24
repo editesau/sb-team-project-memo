@@ -10,7 +10,6 @@ export const useGameBoard = () => {
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
   const { gameId } = useParams()
-  const queryClient = useQueryClient()
   // Получает массив с картами
   const { isLoading, isFetching } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
@@ -34,6 +33,9 @@ export const useGameBoard = () => {
 
   // Механизм совпадения/несовпадения карт
   useEffect(() => {
+    if (cards.every((card) => card.isMatched) && cards.length !== 0) {
+      console.log('You win')
+    }
     if (openedCards.length === 2) {
       const [firstCard, secondCard] = openedCards
 

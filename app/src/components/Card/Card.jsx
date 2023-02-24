@@ -16,7 +16,11 @@ export const Card = ({
   const [picture, setPicture] = useState('')
   const { gameId } = useParams()
   const gameType = useGameStore((state) => state.gameType)
-
+  const setCardStyle = () => {
+    if (countCard > 12) return styles.imgHardVersion
+    if (countCard < 12) return styles.imgEasyVersion
+    return styles.imgMiddleVersion
+  }
   // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
   const { mutate: openCard } = useMutation({
     mutationFn: async () => {
@@ -30,6 +34,7 @@ export const Card = ({
       queryClient.invalidateQueries({ queryKey: ['CARDS_QUERY_KEY'] })
     },
   })
+
   // Получает и сохраняет картинку в стэйт picture
   useEffect(() => {
     async function getPicture() {
@@ -59,11 +64,7 @@ export const Card = ({
       disabled={card.isOpen}
     >
       <img
-        className={`
-        ${countCard === 12 && styles.imgMiddleVersion}
-        ${countCard < 12 && styles.imgEasyVersion}
-        ${countCard > 12 && styles.imgHardVersion}
-    `}
+        className={setCardStyle()}
         src={(card.isOpen && picture) || (card.isMatched && picture) ? picture : shirt}
         alt="logo"
       />
