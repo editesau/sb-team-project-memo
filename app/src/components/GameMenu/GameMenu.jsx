@@ -4,6 +4,7 @@ import styles from './gameMenu.module.scss'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
 import { NewGame } from '../NewGame/NewGame'
+import fullLogo from '../../resources/images/logo/logo_full.png'
 
 export const GameMenu = () => {
   const navigate = useNavigate()
@@ -28,15 +29,16 @@ export const GameMenu = () => {
 
   return (
     <div className={styles.container}>
+      <img src={fullLogo} alt="Memorika logo" />
       <div className={styles.main}>
         <NewGame />
-        <Link to="/options"> Settings </Link>
+        <Link to="/options"> Настройки </Link>
         <span
           role="presentation"
           onClick={logoutMutate}
         >
           {' '}
-          Exit
+          Выход
           {' '}
         </span>
       </div>

@@ -1,14 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable import/no-relative-packages */
-import { QueryClient, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import shirt from '../../resources/images/shirts/shirt_1.png'
+import shirt from '../../resources/images/shirts/shirt_logo.png'
 import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import styles from './card.module.scss'
-
-const queryClient = new QueryClient()
 
 export const Card = ({
   card, countCard, openedCards, setOpenedCards,
@@ -31,7 +29,6 @@ export const Card = ({
       setOpenedCards([...openedCards, {
         ...cardObj,
       }])
-      queryClient.invalidateQueries({ queryKey: ['CARDS_QUERY_KEY'] })
     },
   })
 

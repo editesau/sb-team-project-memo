@@ -65,6 +65,7 @@ export const useGameBoard = () => {
     if (countCard < 12) return styles.containerItemEasyVersion
     return styles.containerItemMediumVersion
   }
+
   return {
     cards,
     countCard,

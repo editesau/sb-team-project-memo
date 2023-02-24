@@ -59,7 +59,7 @@ export const NewGame = () => {
   return (
     <div className={styles.wr}>
       <div className={styles.link} onClick={clickHandler}>
-        <span onClick={clickHandler}> New Game </span>
+        <span onClick={clickHandler}> Начать игру </span>
       </div>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.wr_start}>

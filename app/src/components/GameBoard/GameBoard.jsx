@@ -17,6 +17,7 @@ export const GameBoard = () => {
     getContainerStyle,
     getContainerItemStyle,
   } = useGameBoard()
+
   return (
     <div className={getContainerStyle()}>
       <div className={getContainerItemStyle()}>
