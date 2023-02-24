@@ -60,7 +60,6 @@ export const Card = ({
     <div
       className={styles.containerImg}
       onClick={handlerCardClick}
-      onKeyDown={handlerCardClick}
       disabled={card.isOpen}
     >
       <img

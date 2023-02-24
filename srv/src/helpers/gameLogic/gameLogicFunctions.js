@@ -57,4 +57,9 @@ export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   return card
 })
 
+export const resetCards = (cards) => cards.map((card) => ({
+  ...card,
+  isOpen: false,
+  isMatched: false,
+})).sort(() => Math.random() - 0.5)
 export const getTypesDir = () => fs.readdirSync(imagesPath)

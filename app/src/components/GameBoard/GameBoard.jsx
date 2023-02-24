@@ -13,12 +13,10 @@ export const GameBoard = () => {
     openedCards,
     setOpenedCards,
     isFinished,
-    isLoading,
     setIsFinished,
     getContainerStyle,
     getContainerItemStyle,
   } = useGameBoard()
-  if (isLoading) return <Loader />
   return (
     <div className={getContainerStyle()}>
       <div className={getContainerItemStyle()}>
