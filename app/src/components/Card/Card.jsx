@@ -2,7 +2,8 @@
 /* eslint-disable import/no-relative-packages */
 import { QueryClient, useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import shirt from '../../../../srv/resources/shirt/shirt_1.png'
+import { useParams } from 'react-router-dom'
+import shirt from '../../resources/images/shirts/shirt_1.png'
 import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../tools/Api/Api'
 import styles from './card.module.scss'
@@ -13,12 +14,17 @@ export const Card = ({
   card, countCard, openedCards, setOpenedCards,
 }) => {
   const [picture, setPicture] = useState('')
+  const { gameId } = useParams()
   const gameType = useGameStore((state) => state.gameType)
-
+  const getCardStyle = () => {
+    if (countCard > 12) return styles.imgHardVersion
+    if (countCard < 12) return styles.imgEasyVersion
+    return styles.imgMiddleVersion
+  }
   // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
-  const { mutate } = useMutation({
+  const { mutate: openCard } = useMutation({
     mutationFn: async () => {
-      const cardResponse = await api.turnCard(card.id).json()
+      const cardResponse = await api.openCard(gameId, card.id).json()
       return cardResponse
     },
     onSuccess: async (cardObj) => {
@@ -32,7 +38,7 @@ export const Card = ({
   // Получает и сохраняет картинку в стэйт picture
   useEffect(() => {
     async function getPicture() {
-      if (card.isOpen) {
+      if (card.isOpen || card.isMatched) {
         const imgGetResponse = await api.getImage(card.picture, gameType)
         const blob = await imgGetResponse.blob()
         const image = window.URL.createObjectURL(blob)
@@ -47,22 +53,17 @@ export const Card = ({
     if (card.isMatched || openedCards.length === 2) {
       return
     }
-    mutate()
+    openCard()
   }
 
   return (
     <div
       className={styles.containerImg}
       onClick={handlerCardClick}
-      onKeyDown={handlerCardClick}
       disabled={card.isOpen}
     >
       <img
-        className={`
-        ${countCard === 12 && styles.imgMiddleVersion}
-        ${countCard < 12 && styles.imgEasyVersion}
-        ${countCard > 12 && styles.imgHardVersion}
-    `}
+        className={getCardStyle()}
         src={(card.isOpen && picture) || (card.isMatched && picture) ? picture : shirt}
         alt="logo"
       />

@@ -1,52 +1,80 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 import api from '../../../tools/Api/Api'
-import { useGameStore } from '../../../store/gameStore/useGameStore'
+import styles from '../gameBoard.module.scss'
 
 export const useGameBoard = () => {
   const [cards, setCards] = useState([])
+  const [isFinished, setIsFinished] = useState(false)
   const [openedCards, setOpenedCards] = useState([])
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
-  const gameId = useGameStore((state) => state.gameId)
-
+  const { gameId } = useParams()
   // Получает массив с картами
   const { isLoading, isFetching } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
-    queryFn: () => api.getCards()
+    queryFn: () => api.getCards(gameId)
       .then((res) => res.json()),
     onSuccess: (arrCards) => {
       setCards(arrCards)
+      if (arrCards.every((card) => card.isMatched)) setIsFinished(true)
     },
+  })
+
+  const { mutate: matchCards } = useMutation({
+    mutationFn: (cardIds) => api.matchCards(gameId, cardIds),
+    onSuccess: () => {
+      setOpenedCards([])
+    },
+  })
+
+  const { mutate: closeCards } = useMutation({
+    mutationFn: (cardIds) => api.closeCards(gameId, cardIds),
   })
 
   // Механизм совпадения/несовпадения карт
   useEffect(() => {
+    if (cards.every((card) => card.isMatched) && cards.length !== 0) {
+      setIsFinished(true)
+    }
     if (openedCards.length === 2) {
       const [firstCard, secondCard] = openedCards
 
       // Если картинки совпадают, то isMatched - true
       if (firstCard.picture === secondCard.picture) {
         const openedCardsIds = openedCards.map((card) => card.id)
-        api.matchCards(openedCardsIds)
+        matchCards(openedCardsIds)
       } else {
-        // если картинки не совпали, то запрос на сервер и isOpen - false
+        closeCards(openedCards.map((card) => card.id))
       }
-
-      // Очищает массив открытых карт - openedCards, если в массиве две карты
-      setOpenedCards([])
+      setTimeout(() => {
+        setOpenedCards([])
+      }, 1000)
     }
   }, [openedCards])
+  const getContainerStyle = () => {
+    if (countCard > 12) return styles.containerHardVersion
+    if (countCard < 12) return styles.containerEasyVersion
+    return styles.containerMediumVersion
+  }
 
+  const getContainerItemStyle = () => {
+    if (countCard > 12) return styles.containerItemHardVersion
+    if (countCard < 12) return styles.containerItemEasyVersion
+    return styles.containerItemMediumVersion
+  }
   return {
-    gameId,
     cards,
     countCard,
-    setCards,
     openedCards,
     setOpenedCards,
     isLoading,
     isFetching,
+    isFinished,
+    setIsFinished,
+    getContainerStyle,
+    getContainerItemStyle,
   }
 }

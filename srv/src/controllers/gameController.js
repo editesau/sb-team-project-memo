@@ -1,6 +1,6 @@
 import { filterCards, generateCards, getTypesDir } from '../helpers/gameLogic/gameLogicFunctions.js'
 import {
-  dbCreateGame, dbGetGameCards, dbSetMatched, dbTurnCard,
+  dbCreateGame, dbGetGameCards, dbSetMatched, dbOpenCard, dbCloseCards, dbResetGame,
 } from '../db/dbActions.js'
 
 export const getCards = async (req, res) => {
@@ -32,14 +32,31 @@ export const startGame = async (req, res) => {
   }
 }
 
-export const turnCard = async (req, res) => {
+export const openCard = async (req, res) => {
   const gameId = req.params.gameId
   const cardId = req.params.cardId
   const userId = req.userId
   try {
-    const game = await dbTurnCard(userId, gameId, cardId)
+    const game = await dbOpenCard(userId, gameId, cardId)
     if (game) {
       const cardToReturn = filterCards(game.cards).find((card) => card.id === cardId)
+      res.json(cardToReturn)
+    } else {
+      res.status(400).json({ message: 'Cant find data' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const closeCards = async (req, res) => {
+  const gameId = req.params.gameId
+  const cardIds = req.body.cardIds
+  const userId = req.userId
+  try {
+    const game = await dbCloseCards(userId, gameId, cardIds)
+    if (game) {
+      const cardToReturn = filterCards(game.cards).find((card) => cardIds.includes(card.id))
       res.json(cardToReturn)
     } else {
       res.status(400).json({ message: 'Cant find data' })
@@ -72,5 +89,20 @@ export const getGameTypes = async (req, res) => {
     res.json({ types })
   } catch (error) {
     res.status(500).json({ message: error })
+  }
+}
+
+export const resetGame = async (req, res) => {
+  const gameId = req.params.gameId
+  const userId = req.userId
+  try {
+    const game = await dbResetGame(userId, gameId)
+    if (game) {
+      res.sendStatus(200)
+    } else {
+      res.status(400).json({ message: 'Cant find data' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
   }
 }

@@ -6,7 +6,9 @@ import {
 } from '../helpers/constants.js'
 import UserSchema from './models/UserSchema.js'
 import GameSchema from './models/GameSchema.js'
-import { setMatchedCards, turnCard } from '../helpers/gameLogic/gameLogicFunctions.js'
+import {
+  setMatchedCards, openCard, closeCards, resetCards,
+} from '../helpers/gameLogic/gameLogicFunctions.js'
 
 /** Function to generate mongoDB connection URL
  *@param host {string} IP address or DNS hostname
@@ -96,9 +98,16 @@ export const dbGetGameCards = (userId, gameId) => {
   return Game.findOne({ _id: gameId, userId })
 }
 
-export const dbTurnCard = async (userId, gameId, cardId) => {
+export const dbOpenCard = async (userId, gameId, cardId) => {
   const game = await dbGetGameCards(userId, gameId)
-  const newCards = turnCard(game.cards, cardId)
+  const newCards = openCard(game.cards, cardId)
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+}
+
+export const dbCloseCards = async (userId, gameId, cardIds) => {
+  const game = await dbGetGameCards(userId, gameId)
+  const newCards = closeCards(game.cards, cardIds)
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }
@@ -106,7 +115,13 @@ export const dbTurnCard = async (userId, gameId, cardId) => {
 export const dbSetMatched = async (userId, gameId, cardIds) => {
   const game = await dbGetGameCards(userId, gameId)
   const newCards = setMatchedCards(game.cards, cardIds)
-  console.log(newCards)
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+}
+
+export const dbResetGame = async (userId, gameId) => {
+  const game = await dbGetGameCards(userId, gameId)
+  const newCards = resetCards(game.cards)
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
 }

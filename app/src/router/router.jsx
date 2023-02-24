@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
         element: <GameMenu />,
       },
       {
-        path: 'game',
+        path: 'game/:gameId',
         element: <GameBoard />,
       },
     ],

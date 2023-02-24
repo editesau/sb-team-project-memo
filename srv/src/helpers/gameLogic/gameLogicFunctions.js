@@ -26,7 +26,7 @@ export const filterCards = (cards) => cards.map((card) => {
   return returnedCard
 })
 
-export const turnCard = (cards, cardId) => cards.map((card) => {
+export const openCard = (cards, cardId) => cards.map((card) => {
   if (!card.isOpen && card.id === cardId) {
     return {
       ...card,
@@ -36,8 +36,17 @@ export const turnCard = (cards, cardId) => cards.map((card) => {
   return card
 })
 
+export const closeCards = (cards, cardIds) => cards.map((card) => {
+  if (card.isOpen && cardIds.includes(card.id)) {
+    return {
+      ...card,
+      isOpen: false,
+    }
+  }
+  return card
+})
+
 export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
-  console.log(cardIds)
   if (card.isOpen && cardIds.includes(card.id)) {
     return {
       ...card,
@@ -48,4 +57,9 @@ export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   return card
 })
 
+export const resetCards = (cards) => cards.map((card) => ({
+  ...card,
+  isOpen: false,
+  isMatched: false,
+})).sort(() => Math.random() - 0.5)
 export const getTypesDir = () => fs.readdirSync(imagesPath)
