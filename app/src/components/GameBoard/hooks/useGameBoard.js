@@ -19,6 +19,7 @@ export const useGameBoard = () => {
       .then((res) => res.json()),
     onSuccess: (arrCards) => {
       setCards(arrCards)
+      if (arrCards.every((card) => card.isMatched)) setIsFinished(true)
     },
   })
 
