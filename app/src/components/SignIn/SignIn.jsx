@@ -8,6 +8,7 @@ import styles from './signin.module.scss'
 import { validationSchemaSignIn } from './validationSchema/validationSchema'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
+import fullLogo from '../../resources/images/logo/logo_full.png'
 
 export const SignIn = () => {
   const navigate = useNavigate()
@@ -31,30 +32,31 @@ export const SignIn = () => {
     >
       {(formik) => (
         <Form className={styles.container}>
+          <img src={fullLogo} alt="Memorika logo" />
           <div className={styles.main}>
             <div className={styles.mainItem}>
 
               <div className={styles.textLabel}>
-                <h1>Sign In</h1>
+                <h1>Вход</h1>
               </div>
 
               <div className={styles.fieldContainer}>
-                <Field type="email" name="email" className={styles.field} placeholder="Your Email" autoComplete="off" />
+                <Field type="email" name="email" className={styles.field} placeholder="Ваш email" autoComplete="off" />
                 <ErrorMessage className={styles.errorMessage} component="span" name="email" />
               </div>
 
               <div className={styles.fieldContainer}>
-                <Field type="password" name="password" className={styles.field} placeholder="Your Password" autoComplete="off" />
+                <Field type="password" name="password" className={styles.field} placeholder="Ваш пароль" autoComplete="off" />
                 <ErrorMessage className={styles.errorMessage} component="span" name="password" />
               </div>
 
               <div className={styles.btnContainer}>
-                <MemoButton text="Авторизация" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
+                <MemoButton text="Войти" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
               </div>
 
               <div className={styles.redirectContainer}>
-                <span className={styles.textRedirect}>New to Memo?</span>
-                <Link to="/signup">Create an account</Link>
+                <span className={styles.textRedirect}>Еще не зарегистрированы?</span>
+                <Link to="/signup">Создать аккаунт</Link>
               </div>
 
             </div>

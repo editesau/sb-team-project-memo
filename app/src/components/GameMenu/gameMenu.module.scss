@@ -1,27 +1,29 @@
 .container{
   width: 100vw;
   height: 100vh;
-margin: 0;
-padding: 0;
+  margin: 0;
+  padding: 0;
 
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 
-
-font-family: 'Jost', sans-serif;
+  font-family: 'Jost', sans-serif;
   background: linear-gradient(to bottom, #0f0c29, #5D0E9F, #24243e);
+
 }
 .main{
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  bottom: 4vh;
+  //bottom: 4vh;
   background-color: #5D0E9F;
   box-shadow: 5px 20px 50px #000;
   width: 28rem;
-  height: 30rem;
+  height: 25rem;
   align-items: center;
   border-radius: 15%;
 
@@ -34,9 +36,9 @@ font-family: 'Jost', sans-serif;
         transition:         transform .5s ease-in-out;
    
         &:hover{
-        box-shadow: 10px 5px 5px red;
-        -webkit-transform: rotate(360deg); /* Градусы поворота можно изменить по необходимости */
-          transform: rotate(360deg); /* Градусы поворота можно изменить по необходимости */
+        box-shadow: 10px 5px 5px #61dafb;
+        -webkit-transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
+          transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
         }
     }
 }

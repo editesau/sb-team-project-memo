@@ -91,7 +91,9 @@ export const userAuthRefresh = async (req, res) => {
   const userId = req.userId
   try {
     const dbUser = await dbGetUser(userId)
+    console.log(dbUser)
     if (dbUser.refreshToken === req.refreshToken) {
+      console.log(dbUser.refreshToken === req.refreshToken)
       const accessToken = createAccessToken({ userId })
       const refreshToken = createRefreshToken({ userId })
       await dbSetRefreshToken(userId, refreshToken)

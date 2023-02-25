@@ -5,6 +5,7 @@
 	padding: 0;
 
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 
@@ -15,7 +16,7 @@
 
 .main {
 	width: 28rem;
-	height: 38rem;
+	height: 30rem;
 	overflow: hidden;
 	border-radius: 1rem;
 	box-shadow: 5px 20px 50px #000;
@@ -29,10 +30,10 @@
 
 .textLabel {    
 	color: #f4e603;
-	font-size: 1rem;
+	font-size: .75rem;
     font-weight: bold;
 
-	margin: 2rem;
+	margin: .25rem;
 	
     justify-content: center;
 	display: flex;
@@ -48,11 +49,11 @@
 	width: 70%;
 	height: 2rem;
 	background: #f1eeee;
-    margin-top: 1rem;
+    margin-top: .5rem;
 	padding: 10px;
 
     font-size: 1.2rem;
-
+	color: black;
     outline: none;
     border-color: #FFF44B;
     border-width: .2rem;
@@ -63,7 +64,7 @@
 }
 
 .errorMessage {
-    font-size: 1.3rem;
+    font-size: 1rem;
     color: red;
     margin-top: .3rem;
 }
@@ -73,4 +74,5 @@
     flex-direction: column;
     align-items: center;
     margin-top: 2rem;
+	gap: .5rem;
 }

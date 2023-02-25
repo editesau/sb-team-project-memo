@@ -14,19 +14,28 @@ import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Loader } from '../Loader/Loader'
 import { Modal } from '../Modal/Modal'
 import styles from './newGame.module.scss'
+import { notifyError } from '../../tools/toaster/toaster.js'
 
 export const NewGame = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const changeGameType = useGameStore((state) => state.changeGameType)
 
-  const getGameTypesFunc = () => api.getGameTypes().then((res) => res.json())
+  const getGameTypesFunc = async () => {
+    const response = await api.getGameTypes()
+    return response.json()
+  }
 
   const {
     data, isLoading,
   } = useQuery({
     queryKey: ['gameType'],
     queryFn: getGameTypesFunc,
+    onError: () => {
+      api.clearToken()
+      notifyError('Ошибка авторизации')
+      navigate('/signin')
+    },
   })
 
   const addGameId = useGameStore((state) => state.addGameId)
@@ -59,7 +68,7 @@ export const NewGame = () => {
   return (
     <div className={styles.wr}>
       <div className={styles.link} onClick={clickHandler}>
-        <span onClick={clickHandler}> New Game </span>
+        <span onClick={clickHandler}> Начать игру </span>
       </div>
       <Modal isOpen={isOpen} closeHandler={closeHandler}>
         <div className={styles.wr_start}>
