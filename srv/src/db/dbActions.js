@@ -135,3 +135,8 @@ export const dbSetUserAvatar = async (userId, avatarUrl) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate(userId, { avatar: avatarUrl }, { new: true })
 }
+
+export const dbGetUserGames = async (userId) => {
+  const Game = mongoose.model('games', GameSchema)
+  return Game.find({ userId }).select({ cards: 0 })
+}

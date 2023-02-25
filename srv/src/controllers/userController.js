@@ -1,5 +1,7 @@
 import * as bcrypt from 'bcrypt'
-import { dbChangeUserPassword, dbGetUser, dbSetUserAvatar } from '../db/dbActions.js'
+import {
+  dbChangeUserPassword, dbGetUser, dbGetUserGames, dbSetUserAvatar,
+} from '../db/dbActions.js'
 
 export const userChangePassword = (req, res) => {
   const userId = req.userId
@@ -54,6 +56,21 @@ export const userGetInfo = async (req, res) => {
       res.json({ userData })
     } else {
       res.status(400).json({ message: 'User not found' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const userGetGames = async (req, res) => {
+  const userId = req.userId
+
+  try {
+    const userGamesFromDb = dbGetUserGames(userId)
+    if (userGamesFromDb) {
+      res.json({ games: userGamesFromDb })
+    } else {
+      res.status(400).json({ message: 'Games not found' })
     }
   } catch (dbError) {
     res.status(500).json({ message: dbError.message })
