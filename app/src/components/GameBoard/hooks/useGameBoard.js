@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../../tools/Api/Api'
 import styles from '../gameBoard.module.scss'
 
 export const useGameBoard = () => {
+  const navigate = useNavigate()
   const [cards, setCards] = useState([])
   const [isFinished, setIsFinished] = useState(false)
   const [openedCards, setOpenedCards] = useState([])
@@ -70,6 +71,8 @@ export const useGameBoard = () => {
     return styles.containerItemMediumVersion
   }
 
+  const btnBackHandler = () => navigate('/menu')
+
   return {
     cards,
     countCard,
@@ -80,5 +83,6 @@ export const useGameBoard = () => {
     setIsFinished,
     getContainerStyle,
     getContainerItemStyle,
+    btnBackHandler,
   }
 }
