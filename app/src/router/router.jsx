@@ -4,8 +4,7 @@ import { SignIn } from '../components/SignIn/SignIn.jsx'
 import { SignUp } from '../components/SignUp/SignUp.jsx'
 import { GameMenu } from '../components/GameMenu/GameMenu.jsx'
 import { GameBoard } from '../components/GameBoard/GameBoard.jsx'
-import { ErrorScreen } from '../components/ErrorScreen/ErrorScreen'
-import logoError from '../resources/images/logo/error.png'
+import { UserCabinet } from '../components/UserCabinet/UserCabinet.jsx'
 
 export const router = createBrowserRouter([
   {
@@ -29,8 +28,8 @@ export const router = createBrowserRouter([
         element: <GameBoard />,
       },
       {
-        path: 'options',
-        element: <ErrorScreen textError="Увы, такой страницы не существует." errorImages={logoError} />,
+        path: 'user',
+        element: <UserCabinet />,
       },
     ],
   },

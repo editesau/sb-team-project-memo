@@ -3,17 +3,17 @@ import {
   dbChangeUserPassword, dbGetUser, dbGetUserGames, dbSetUserAvatar,
 } from '../db/dbActions.js'
 
-export const userChangePassword = (req, res) => {
+export const userChangePassword = async (req, res) => {
   const userId = req.userId
   const currentPassword = req.body.currentPassword
   const newPassword = req.body.newPassword
 
   try {
-    const user = dbGetUser(userId)
+    const user = await dbGetUser(userId)
     if (user) {
       const isPasswordValid = bcrypt.compare(currentPassword, user.password)
       if (isPasswordValid) {
-        const updatedUser = dbChangeUserPassword(userId, newPassword)
+        const updatedUser = await dbChangeUserPassword(userId, newPassword)
         if (updatedUser) {
           res.sendStatus(200)
         } else {
@@ -30,12 +30,12 @@ export const userChangePassword = (req, res) => {
   }
 }
 
-export const userSetAvatar = (req, res) => {
+export const userSetAvatar = async (req, res) => {
   const userId = req.userId
   const avatarUrl = req.body.avatarUrl
 
   try {
-    const updatedUser = dbSetUserAvatar(userId, avatarUrl)
+    const updatedUser = await dbSetUserAvatar(userId, avatarUrl)
     if (updatedUser) {
       res.sendStatus(200)
     } else {
@@ -52,7 +52,9 @@ export const userGetInfo = async (req, res) => {
   try {
     const userFromDb = await dbGetUser(userId)
     if (userFromDb) {
-      const { password, userData } = userFromDb
+      const {
+        password, refreshToken, __v, ...userData
+      } = userFromDb._doc
       res.json({ userData })
     } else {
       res.status(400).json({ message: 'User not found' })
@@ -66,7 +68,7 @@ export const userGetGames = async (req, res) => {
   const userId = req.userId
 
   try {
-    const userGamesFromDb = dbGetUserGames(userId)
+    const userGamesFromDb = await dbGetUserGames(userId)
     if (userGamesFromDb) {
       res.json({ games: userGamesFromDb })
     } else {

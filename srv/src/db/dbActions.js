@@ -127,8 +127,9 @@ export const dbResetGame = async (userId, gameId) => {
 }
 
 export const dbChangeUserPassword = async (userId, newPassword) => {
+  const cryptPassword = await bcrypt.hash(newPassword, +BCRYPT_SALT)
   const User = mongoose.model('users', UserSchema)
-  return User.findByIdAndUpdate(userId, { password: newPassword }, { new: true })
+  return User.findByIdAndUpdate(userId, { password: cryptPassword }, { new: true })
 }
 
 export const dbSetUserAvatar = async (userId, avatarUrl) => {
@@ -138,5 +139,5 @@ export const dbSetUserAvatar = async (userId, avatarUrl) => {
 
 export const dbGetUserGames = async (userId) => {
   const Game = mongoose.model('games', GameSchema)
-  return Game.find({ userId }).select({ cards: 0 })
+  return Game.find({ userId }).select('state')
 }
