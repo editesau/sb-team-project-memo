@@ -11,6 +11,8 @@ const kyGetErrorMessage = {
           const body = await response.json()
           // eslint-disable-next-line no-param-reassign
           error.message = `${body.message} (${response.status})`
+          // eslint-disable-next-line no-param-reassign
+          error.status = response.status
         } catch (jsonError) {
           return error
         }
@@ -33,7 +35,8 @@ class Api {
       const now = Date.now()
       exp *= 1e3
       if (exp <= now) {
-        const { accessToken } = await this.refreshTokens()
+        const refreshResponse = await this.refreshTokens()
+        const { accessToken } = await refreshResponse.json()
         request.headers.set('Authorization', `Bearer ${accessToken}`)
         this.setToken(accessToken)
       }
@@ -86,7 +89,7 @@ class Api {
 
   signOut = () => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/auth/signout`)
 
-  refreshTokens = async () => ky.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' }).json()
+  refreshTokens = async () => this.kyInstance(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' })
 
   getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
 

@@ -34,25 +34,25 @@ export const SignUp = () => {
             <div className={styles.mainItem}>
 
               <div className={styles.textLabel}>
-                <h1>Sign up</h1>
+                <h1>Регистрация</h1>
               </div>
 
               <div className={styles.fieldContainer}>
-                <Field type="text" name="userName" className={styles.field} placeholder="User name" autoComplete="off" />
+                <Field type="text" name="userName" className={styles.field} placeholder="Имя пользователя" autoComplete="off" />
               </div>
 
               <div className={styles.fieldContainer}>
-                <Field type="email" name="email" className={styles.field} placeholder="Your Email" autoComplete="off" />
+                <Field type="email" name="email" className={styles.field} placeholder="Ваш email" autoComplete="off" />
                 <ErrorMessage className={styles.errorMessage} component="span" name="email" />
               </div>
 
               <div className={styles.fieldContainer}>
-                <Field type="password" name="password" className={styles.field} placeholder="Your Password" autoComplete="off" />
+                <Field type="password" name="password" className={styles.field} placeholder="Ваш пароль" autoComplete="off" />
                 <ErrorMessage className={styles.errorMessage} component="span" name="password" />
               </div>
 
               <div className={styles.btnContainer}>
-                <MemoButton text="Регистрация" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
+                <MemoButton text="Зарегистрироваться" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
               </div>
 
             </div>
