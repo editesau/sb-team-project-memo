@@ -18,7 +18,7 @@ export const useGameBoard = () => {
     return response.json()
   }
   // Получает массив с картами
-  const { isLoading, isFetching } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
     queryFn: getCardsFn,
     onSuccess: (arrCards) => {
@@ -76,7 +76,6 @@ export const useGameBoard = () => {
     openedCards,
     setOpenedCards,
     isLoading,
-    isFetching,
     isFinished,
     setIsFinished,
     getContainerStyle,
