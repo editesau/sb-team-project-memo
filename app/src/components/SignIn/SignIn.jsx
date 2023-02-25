@@ -8,6 +8,7 @@ import styles from './signin.module.scss'
 import { validationSchemaSignIn } from './validationSchema/validationSchema'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
 import api from '../../tools/Api/Api.js'
+import fullLogo from '../../resources/images/logo/logo_full.png'
 
 export const SignIn = () => {
   const navigate = useNavigate()
@@ -31,6 +32,7 @@ export const SignIn = () => {
     >
       {(formik) => (
         <Form className={styles.container}>
+          <img src={fullLogo} alt="Memorika logo" />
           <div className={styles.main}>
             <div className={styles.mainItem}>
 

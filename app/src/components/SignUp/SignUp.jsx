@@ -8,6 +8,7 @@ import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signup.module.scss'
 import { validationSchemaSignUp } from './validationSchema/validationSchema'
 import api from '../../tools/Api/Api.js'
+import fullLogo from '../../resources/images/logo/logo_full.png'
 
 export const SignUp = () => {
   const navigate = useNavigate()
@@ -30,6 +31,7 @@ export const SignUp = () => {
     >
       {(formik) => (
         <Form className={styles.container}>
+          <img src={fullLogo} alt="Memorika logo" />
           <div className={styles.main}>
             <div className={styles.mainItem}>
 
@@ -53,6 +55,7 @@ export const SignUp = () => {
 
               <div className={styles.btnContainer}>
                 <MemoButton text="Зарегистрироваться" type="submit" disabled={!(formik.isValid && formik.dirty) || isLoading} />
+                <MemoButton text="Вход" type="button" clickHandler={() => navigate('/signin')} />
               </div>
 
             </div>
