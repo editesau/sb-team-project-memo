@@ -30,6 +30,15 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
       queryClient.invalidateQueries('USER_DATA')
     },
   })
+
+  const { mutate: changeAvatarUrlMutation } = useMutation({
+    mutationFn: (avatarUrl) => api.changeAvatar(avatarUrl),
+    onSuccess: () => {
+      notifySuccess('Аватар успешно изменен')
+      setIsOpen(false)
+      queryClient.invalidateQueries('USER_DATA')
+    },
+  })
   const submitHandler = (values) => {
     switch (type) {
       case 'password': {
@@ -40,6 +49,10 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
         changeEmailMutation(values)
         break
       }
+      case 'avatar': {
+        changeAvatarUrlMutation(values)
+        break
+      }
       default: break
     }
   }
@@ -47,7 +60,7 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
     switch (type) {
       case 'password': return { currentPassword: '', newPassword: '' }
       case 'email': return { email: '' }
-      case 'avatar': return { avatar: '' }
+      case 'avatar': return { avatarUrl: '' }
       default: return {}
     }
   }
@@ -62,7 +75,7 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
           .required('Поле обязательное для заполнения'),
       }
       case 'email': return { email: Yup.string().email('Некорректный адрес электронной почты').required('Поле обязательное для заполнения') }
-      case 'avatar': return { avatar: Yup.string().url().required() }
+      case 'avatar': return { avatarUrl: Yup.string().url().required() }
       default: return {}
     }
   }
@@ -84,8 +97,8 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
       )
       case 'avatar': return (
         <>
-          <Field type="url" name="avatar" className={styles.field} placeholder="Ссылка на картинку" autoComplete="off" />
-          <ErrorMessage className={styles.errorMessage} component="span" name="avatar" />
+          <Field type="url" name="avatarUrl" className={styles.field} placeholder="Ссылка на картинку" autoComplete="off" />
+          <ErrorMessage className={styles.errorMessage} component="span" name="avatarUrl" />
         </>
       )
       default: return undefined
