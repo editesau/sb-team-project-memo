@@ -12,11 +12,15 @@ export const useGameBoard = () => {
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
   const { gameId } = useParams()
+
+  const getCardsFn = async (gameId) => {
+    const response = await api.getCards(gameId)
+    return response.json()
+  }
   // Получает массив с картами
   const { isLoading, isFetching } = useQuery({
     queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
-    queryFn: () => api.getCards(gameId)
-      .then((res) => res.json()),
+    queryFn: () => getCardsFn(gameId),
     onSuccess: (arrCards) => {
       setCards(arrCards)
       if (arrCards.every((card) => card.isMatched)) setIsFinished(true)
