@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from '../Modal/Modal.jsx'
 import styles from './userCabinetModal.module.scss'
@@ -12,7 +12,8 @@ import { notifySuccess } from '../../tools/toaster/toaster.js'
 
 export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
   const navigate = useNavigate()
-  const { mutate: changePasswordMutattion } = useMutation({
+  const queryClient = useQueryClient()
+  const { mutate: changePasswordMutation } = useMutation({
     mutationFn: (credentials) => api.changePassword(credentials),
     onSuccess: () => {
       notifySuccess('Пароль успешно изменен')
@@ -21,11 +22,22 @@ export const UserCabinetModal = ({ type, isOpen, setIsOpen }) => {
       navigate('/')
     },
   })
-
+  const { mutate: changeEmailMutation } = useMutation({
+    mutationFn: (email) => api.changeEmail(email),
+    onSuccess: () => {
+      notifySuccess('e-mail успешно изменен')
+      setIsOpen(false)
+      queryClient.invalidateQueries('USER_DATA')
+    },
+  })
   const submitHandler = (values) => {
     switch (type) {
       case 'password': {
-        changePasswordMutattion(values)
+        changePasswordMutation(values)
+        break
+      }
+      case 'email': {
+        changeEmailMutation(values)
         break
       }
       default: break

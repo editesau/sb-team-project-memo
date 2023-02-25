@@ -141,3 +141,8 @@ export const dbGetUserGames = async (userId) => {
   const Game = mongoose.model('games', GameSchema)
   return Game.find({ userId }).select('state')
 }
+
+export const dbChangeUserEmail = async (userId, newEmail) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate(userId, { email: newEmail })
+}

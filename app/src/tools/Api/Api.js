@@ -95,6 +95,8 @@ class Api {
 
   changePassword = async (credentials) => this.kyAuthInstance.put(`${this.baseUrl}/api/v1/user/password`, { json: credentials })
 
+  changeEmail = async (email) => this.kyAuthInstance.put(`${this.baseUrl}/api/v1/user/email`, { json: email })
+
   getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
 
   getGameId = (level, types) => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/game/start`, { json: { level: `${level}`, gameType: `${types}` } })

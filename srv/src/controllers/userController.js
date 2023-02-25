@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import {
+  dbChangeUserEmail,
   dbChangeUserPassword, dbGetUser, dbGetUserGames, dbSetUserAvatar,
 } from '../db/dbActions.js'
 
@@ -36,6 +37,22 @@ export const userSetAvatar = async (req, res) => {
 
   try {
     const updatedUser = await dbSetUserAvatar(userId, avatarUrl)
+    if (updatedUser) {
+      res.sendStatus(200)
+    } else {
+      res.status(400).json({ message: 'Filed to update a user' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
+
+export const userChangeEmail = async (req, res) => {
+  const userId = req.userId
+  const newEmail = req.body.email
+
+  try {
+    const updatedUser = await dbChangeUserEmail(userId, newEmail)
     if (updatedUser) {
       res.sendStatus(200)
     } else {
