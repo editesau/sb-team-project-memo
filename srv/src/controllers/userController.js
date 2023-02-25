@@ -43,3 +43,19 @@ export const userSetAvatar = (req, res) => {
     res.status(500).json({ message: dbError.message })
   }
 }
+
+export const userGetInfo = async (req, res) => {
+  const userId = req.userId
+
+  try {
+    const userFromDb = await dbGetUser(userId)
+    if (userFromDb) {
+      const { password, userData } = userFromDb
+      res.json({ userData })
+    } else {
+      res.status(400).json({ message: 'User not found' })
+    }
+  } catch (dbError) {
+    res.status(500).json({ message: dbError.message })
+  }
+}
