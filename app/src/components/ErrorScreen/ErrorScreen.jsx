@@ -1,9 +1,10 @@
 import styles from './errorScreen.module.scss'
+import minLogo from '../../resources/images/logo/logo_mini.png'
 
 export const ErrorScreen = ({ textError, errorImages }) => (
   <div className="container">
     <div className={`${styles.main}`}>
-
+      <img src={minLogo} alt="Memorika logo" />
       <div className="text-center">
         <h3 className={styles.caption}>Oops! Что-то пошло не так!</h3>
       </div>

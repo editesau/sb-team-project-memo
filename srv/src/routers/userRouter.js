@@ -1,8 +1,14 @@
 import { Router } from 'express'
 import { checkAuth } from '../middlewares/authMiddleware.js'
-import { userChangePassword, userSetAvatar } from '../controllers/userController.js'
+import {
+  userChangeEmail,
+  userChangePassword, userGetGames, userGetInfo, userSetAvatar,
+} from '../controllers/userController.js'
 
-const userRouter = new Router()
+export const userRouter = new Router()
 
-userRouter.put('/user/password', checkAuth, userChangePassword)
-userRouter.put('/user/avatar', checkAuth, userSetAvatar)
+userRouter.put('/password', checkAuth, userChangePassword)
+userRouter.put('/avatar', checkAuth, userSetAvatar)
+userRouter.put('/email', checkAuth, userChangeEmail)
+userRouter.get('/', checkAuth, userGetInfo)
+userRouter.get('/games', checkAuth, userGetGames)

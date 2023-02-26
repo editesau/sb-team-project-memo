@@ -127,11 +127,22 @@ export const dbResetGame = async (userId, gameId) => {
 }
 
 export const dbChangeUserPassword = async (userId, newPassword) => {
+  const cryptPassword = await bcrypt.hash(newPassword, +BCRYPT_SALT)
   const User = mongoose.model('users', UserSchema)
-  return User.findByIdAndUpdate(userId, { password: newPassword }, { new: true })
+  return User.findByIdAndUpdate(userId, { password: cryptPassword }, { new: true })
 }
 
 export const dbSetUserAvatar = async (userId, avatarUrl) => {
   const User = mongoose.model('users', UserSchema)
   return User.findByIdAndUpdate(userId, { avatar: avatarUrl }, { new: true })
+}
+
+export const dbGetUserGames = async (userId) => {
+  const Game = mongoose.model('games', GameSchema)
+  return Game.find({ userId }).select('state')
+}
+
+export const dbChangeUserEmail = async (userId, newEmail) => {
+  const User = mongoose.model('users', UserSchema)
+  return User.findByIdAndUpdate(userId, { email: newEmail })
 }

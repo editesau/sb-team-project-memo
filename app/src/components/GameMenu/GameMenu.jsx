@@ -32,7 +32,7 @@ export const GameMenu = () => {
       <img src={fullLogo} alt="Memorika logo" />
       <div className={styles.main}>
         <NewGame />
-        <Link to="/options"> Настройки </Link>
+        <Link to="/user"> Профиль </Link>
         <span
           role="presentation"
           onClick={logoutMutate}

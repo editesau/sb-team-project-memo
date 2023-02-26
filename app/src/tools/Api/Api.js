@@ -89,7 +89,15 @@ class Api {
 
   signOut = () => this.kyAuthInstance.post(`${this.baseUrl}/api/v1/auth/signout`)
 
-  refreshTokens = async () => this.kyInstance(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' })
+  refreshTokens = async () => this.kyInstance.get(`${this.baseUrl}/api/v1/auth/refresh`, { credentials: 'include' })
+
+  getUserInfo = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/user`)
+
+  changePassword = async (credentials) => this.kyAuthInstance.put(`${this.baseUrl}/api/v1/user/password`, { json: credentials })
+
+  changeEmail = async (email) => this.kyAuthInstance.put(`${this.baseUrl}/api/v1/user/email`, { json: email })
+
+  changeAvatar = async (avatarUrl) => this.kyAuthInstance.put(`${this.baseUrl}/api/v1/user/avatar`, { json: avatarUrl })
 
   getGameTypes = async () => this.kyAuthInstance.get(`${this.baseUrl}/api/v1/game/types`)
 
