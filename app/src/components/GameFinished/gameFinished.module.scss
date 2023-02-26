@@ -1,0 +1,12 @@
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  h2{
+    color: #5D0E9F;
+    font-size: 3rem;
+    font-weight: bold;
+  }
+}
