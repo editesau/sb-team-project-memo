@@ -1,0 +1,95 @@
+.main {
+    padding-top: 1rem;
+    color: #FFF44B;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .caption {
+        margin-top: .5rem;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.container {
+    width: 35vw;
+    height: 40vh;
+    padding: 2.5rem 1.5rem 2.5rem 2.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(to bottom, #1d1752, #7212c0, #323262);
+    box-shadow: 0px 0px 13px 12px rgba(0, 0, 0, 0.42);
+
+    .img {
+        opacity: .9;
+        height: 16rem;
+    }
+
+    .textError {
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 1.3rem;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    .main {    
+        .caption {
+            margin-top: .5rem;
+            font-size: 2.3rem;
+            margin-bottom: 1.4rem;
+        }
+    }
+
+    .container {
+        .textError {
+            font-size: 1.3rem;
+        }
+    }
+}
+
+@media (max-width: 1120px) {
+    .main {    
+        .caption {
+            margin-top: .5rem;
+            font-size: 2rem;
+            margin-bottom: 1.4rem;
+        }
+    }
+    .container {
+        .textError {
+            font-size: 1.1rem;
+        }
+        .img {
+            height: 15rem;
+        }
+    }
+}
+
+@media (max-width: 850px) {
+    .main {    
+        .caption {
+            margin-top: .5rem;
+            font-size: 1.5rem;
+            margin-bottom: 1.1rem;
+        }
+    }
+    
+    .container {
+        width: 30vw;
+        height: 30vh;
+        padding: 2.5rem 1.5rem 2.5rem 2.5rem;
+
+        .textError {
+            font-size: 1.1rem;
+        }
+        .img {
+            height: 10rem;
+        }
+    }
+}
