@@ -3,6 +3,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import http from 'http'
+import { Server } from 'socket.io'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
   API_VERSION,
@@ -17,13 +19,18 @@ import { authRouter } from './routers/authRouter.js'
 import { gameRouter } from './routers/gameRouter.js'
 import { checkAuth } from './middlewares/authMiddleware.js'
 import { userRouter } from './routers/userRouter.js'
+import { initializeSocketService } from './services/socketService.js'
 
 const app = express()
+const httpServer = http.createServer(app)
+
+initializeSocketService(httpServer)
 
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
 }))
+
 app.use(morgan(MORGAN_ENV))
 app.use(express.json())
 app.use(cookieParser())
