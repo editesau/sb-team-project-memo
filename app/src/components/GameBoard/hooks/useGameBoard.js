@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import io from 'socket.io-client'
-import api from '../../../tools/Api/Api'
+import api from '../../../services/Api/Api'
 import styles from '../gameBoard.module.scss'
 
 export const useGameBoard = () => {

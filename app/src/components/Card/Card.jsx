@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import shirt from '../../resources/images/shirts/shirt_logo.png'
 import { useGameStore } from '../../store/gameStore/useGameStore'
-import api from '../../tools/Api/Api'
+import api from '../../services/Api/Api'
 import styles from './card.module.scss'
 
 export const Card = ({
