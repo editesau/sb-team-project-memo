@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
+import io from 'socket.io-client'
 import api from '../../../tools/Api/Api'
 import styles from '../gameBoard.module.scss'
 
@@ -59,6 +60,13 @@ export const useGameBoard = () => {
       }
     }
   }, [openedCards])
+
+  useEffect(() => {
+    const socket = io('ws://127.0.0.1:5050')
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
   const getContainerStyle = () => {
     if (countCard > 12) return styles.containerHardVersion
     if (countCard < 12) return styles.containerEasyVersion

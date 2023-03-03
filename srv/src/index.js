@@ -8,7 +8,7 @@ import { Server } from 'socket.io'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
   API_VERSION,
-  APP_PORT,
+  APP_PORT, CORS_ORIGIN,
   MONGO_CA_PATH,
   MONGO_CLIENT_CRT_PATH,
   MONGO_HOST,
@@ -27,7 +27,7 @@ const httpServer = http.createServer(app)
 initializeSocketService(httpServer)
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: CORS_ORIGIN,
   credentials: true,
 }))
 
@@ -47,7 +47,7 @@ const startApp = async () => {
     await mongoose.connect(mongoConnectionString, mongoConnectionOptions)
     console.log('DB connected')
     try {
-      app.listen(APP_PORT, '0.0.0.0', () => {
+      httpServer.listen(APP_PORT, '0.0.0.0', () => {
         console.log('Server has been started on port:', APP_PORT)
       })
     } catch (appError) {
