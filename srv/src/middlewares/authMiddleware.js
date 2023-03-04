@@ -1,4 +1,5 @@
 import TokenExpiredError from 'jsonwebtoken/lib/TokenExpiredError.js'
+import jwt from 'jsonwebtoken'
 import { checkToken } from '../services/jwtService.js'
 
 export const checkAuth = (req, res, next) => {
@@ -39,4 +40,20 @@ export const checkRefreshToken = (req, res, next) => {
     return res.sendStatus(401)
   }
   return next()
+}
+
+export const socketAuthMiddleware = (socket, next) => {
+  if (socket.handshake.auth && socket.handshake.auth.token) {
+    const { token } = socket.handshake.auth
+    try {
+      const { userId } = checkToken(token)
+      // eslint-disable-next-line no-param-reassign
+      socket.userId = userId
+      next()
+    } catch (e) {
+      next(new Error('Unauthorized'))
+    }
+  } else {
+    next(new Error('Unauthorized'))
+  }
 }

@@ -1,9 +1,10 @@
 import { Server } from 'socket.io'
-import { CORS_ORIGIN } from '../helpers/constants.js'
+import { CORS_ORIGIN, SOCKET_PATH } from '../helpers/constants.js'
+import { socketAuthMiddleware } from '../middlewares/authMiddleware.js'
 
 const registerListeners = (io) => {
   io.on('connection', (socket) => {
-    console.log(`New socket connected from ${socket.handshake.address}`)
+    console.log(`${socket.handshake.address} connected`)
   })
 }
 export const initializeSocketService = (httpServer) => {
@@ -12,6 +13,8 @@ export const initializeSocketService = (httpServer) => {
       origin: CORS_ORIGIN,
       credentials: true,
     },
+    path: SOCKET_PATH,
   })
+  io.use(socketAuthMiddleware)
   registerListeners(io)
 }

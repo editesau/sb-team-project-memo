@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import io from 'socket.io-client'
 import api from '../../../services/Api/Api'
 import styles from '../gameBoard.module.scss'
+import { closeSocket, initializeSocket } from '../../../services/socketService/socketService.js'
 
 export const useGameBoard = () => {
   const navigate = useNavigate()
@@ -62,9 +63,9 @@ export const useGameBoard = () => {
   }, [openedCards])
 
   useEffect(() => {
-    const socket = io('ws://127.0.0.1:5050')
+    initializeSocket()
     return () => {
-      socket.disconnect()
+      closeSocket()
     }
   }, [])
   const getContainerStyle = () => {
