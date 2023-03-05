@@ -7,7 +7,7 @@ import { notifyError, notifySuccess } from '../../tools/toaster/toaster'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import styles from './signup.module.scss'
 import { validationSchemaSignUp } from './validationSchema/validationSchema'
-import api from '../../tools/Api/Api.js'
+import api from '../../services/Api/Api.js'
 import fullLogo from '../../resources/images/logo/logo_full.png'
 
 export const SignUp = () => {

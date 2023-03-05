@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from '../Modal/Modal.jsx'
 import styles from './userCabinetModal.module.scss'
-import api from '../../tools/Api/Api.js'
+import api from '../../services/Api/Api.js'
 import { MemoButton } from '../../ui/MemoButton/MemoButton.jsx'
 import { notifySuccess } from '../../tools/toaster/toaster.js'
 
