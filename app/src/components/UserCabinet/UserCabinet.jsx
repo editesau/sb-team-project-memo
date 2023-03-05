@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../../tools/Api/Api.js'
+import api from '../../services/Api/Api.js'
 import { notifyError } from '../../tools/toaster/toaster.js'
 import { Loader } from '../Loader/Loader.jsx'
 import styles from './userCabinet.module.scss'

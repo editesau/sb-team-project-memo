@@ -1,6 +1,6 @@
 import ky from 'ky'
 import jwt_decode from 'jwt-decode'
-import { getTokenFromLS, setTokenToLS } from '../helpers/helperFunctions.js'
+import { getTokenFromLS, setTokenToLS } from '../../tools/helpers/helperFunctions.js'
 
 const kyGetErrorMessage = {
   beforeError: [

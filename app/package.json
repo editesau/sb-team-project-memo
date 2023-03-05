@@ -1,7 +1,7 @@
 {
   "name": "sb-memo-frontend",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
     "react-toastify": "^9.1.1",
+    "socket.io-client": "^4.6.1",
     "yup": "^0.32.11",
     "zustand": "^4.3.3"
   },

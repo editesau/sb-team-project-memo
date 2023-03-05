@@ -18,3 +18,7 @@ export const JWT_SECRET = process.env.JWT_SECRET
 export const JWT_ACCESS_LIFE = process.env.JWT_ACCESS_LIFE
 
 export const JWT_REFRESH_LIFE = process.env.JWT_REFRESH_LIFE
+
+export const CORS_ORIGIN = process.env.CORS_ORIGIN
+
+export const SOCKET_PATH = process.env.SOCKET_PATH

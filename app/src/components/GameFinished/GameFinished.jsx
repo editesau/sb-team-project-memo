@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { MemoButton } from '../../ui/MemoButton/MemoButton'
 import { Modal } from '../Modal/Modal'
 import styles from './gameFinished.module.scss'
-import api from '../../tools/Api/Api.js'
+import api from '../../services/Api/Api.js'
 
 export const GameFinished = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate()
