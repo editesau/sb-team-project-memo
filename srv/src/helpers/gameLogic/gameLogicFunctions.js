@@ -46,6 +46,7 @@ export const closeCards = (cards, cardIds) => cards.map((card) => {
   return card
 })
 
+export const getCardPictureById = (cardId, cards) => cards.find((card) => card.id === cardId).picture
 export const setMatchedCards = (cards, cardIds) => cards.map((card) => {
   if (card.isOpen && cardIds.includes(card.id)) {
     return {

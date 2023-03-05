@@ -1,71 +1,31 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import io from 'socket.io-client'
-import api from '../../../services/Api/Api'
 import styles from '../gameBoard.module.scss'
-import { closeSocket, initializeSocket } from '../../../services/socketService/socketService.js'
+import { closeSocket, initializeSocket, socketGetGame } from '../../../services/socketService/socketService.js'
+import { useGameStore } from '../../../store/gameStore/useGameStore.js'
 
 export const useGameBoard = () => {
   const navigate = useNavigate()
-  const [cards, setCards] = useState([])
+  const { gameId } = useParams()
   const [isFinished, setIsFinished] = useState(false)
-  const [openedCards, setOpenedCards] = useState([])
+  const cards = useGameStore((state) => state.cards)
+  const setGameCards = useGameStore((state) => state.setGameCards)
+  const setGameType = useGameStore((state) => state.setGameType)
+  const updateCard = useGameStore((state) => state.updateCard)
+  const mismatchCards = useGameStore((state) => state.mismatchCards)
+  const matchCards = useGameStore((state) => state.matchCards)
+  const setIsBoardLocked = useGameStore((state) => state.setIsBoardLocked)
+
   const countCard = cards.length // Число карт для нормальной равномерной отрисовки карт на доске
 
-  const { gameId } = useParams()
-
-  const getCardsFn = async () => {
-    const response = await api.getCards(gameId)
-    return response.json()
-  }
-  // Получает массив с картами
-  const { isLoading } = useQuery({
-    queryKey: ['CARDS_QUERY_KEY'].concat(openedCards, gameId),
-    queryFn: getCardsFn,
-    onSuccess: (arrCards) => {
-      setCards(arrCards)
-      if (arrCards.every((card) => card.isMatched)) setIsFinished(true)
-    },
-  })
-
-  const { mutate: matchCards } = useMutation({
-    mutationFn: (cardIds) => api.matchCards(gameId, cardIds),
-    onSuccess: () => {
-      setOpenedCards([])
-    },
-  })
-
-  const { mutate: closeCards } = useMutation({
-    mutationFn: (cardIds) => api.closeCards(gameId, cardIds),
-  })
-
-  // Механизм совпадения/несовпадения карт
   useEffect(() => {
-    if (cards.every((card) => card.isMatched) && cards.length !== 0) {
-      setIsFinished(true)
-    }
-    if (openedCards.length === 2) {
-      const [firstCard, secondCard] = openedCards
+    initializeSocket(setGameCards, setGameType, updateCard, mismatchCards, matchCards, setIsBoardLocked, setIsFinished)
+    socketGetGame(gameId)
 
-      // Если картинки совпадают, то isMatched - true
-      if (firstCard.picture === secondCard.picture) {
-        const openedCardsIds = openedCards.map((card) => card.id)
-        matchCards(openedCardsIds)
-      } else {
-        closeCards(openedCards.map((card) => card.id))
-        setTimeout(() => {
-          setOpenedCards([])
-        }, 1000)
-      }
-    }
-  }, [openedCards])
-
-  useEffect(() => {
-    initializeSocket()
     return () => {
       closeSocket()
+      setGameCards([])
     }
   }, [])
   const getContainerStyle = () => {
@@ -85,9 +45,6 @@ export const useGameBoard = () => {
   return {
     cards,
     countCard,
-    openedCards,
-    setOpenedCards,
-    isLoading,
     isFinished,
     setIsFinished,
     getContainerStyle,

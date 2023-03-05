@@ -23,7 +23,6 @@ import { initializeSocketService } from './services/socketService.js'
 
 const app = express()
 const httpServer = http.createServer(app)
-
 initializeSocketService(httpServer)
 
 app.use(cors({

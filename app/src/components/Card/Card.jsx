@@ -1,36 +1,25 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable import/no-relative-packages */
-import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import shirt from '../../resources/images/shirts/shirt_logo.png'
 import { useGameStore } from '../../store/gameStore/useGameStore'
 import api from '../../services/Api/Api'
 import styles from './card.module.scss'
+import { socketOpenCard } from '../../services/socketService/socketService.js'
 
 export const Card = ({
-  card, countCard, openedCards, setOpenedCards,
+  card, countCard,
 }) => {
-  const [picture, setPicture] = useState('')
   const { gameId } = useParams()
+  const [picture, setPicture] = useState('')
   const gameType = useGameStore((state) => state.gameType)
+  const isBoardLocked = useGameStore((state) => state.isBoardLocked)
   const getCardStyle = () => {
     if (countCard > 12) return styles.imgHardVersion
     if (countCard < 12) return styles.imgEasyVersion
     return styles.imgMiddleVersion
   }
-  // Переворачивает карту - isOpen - true и добавляет в массив открытых карт - openedCards
-  const { mutate: openCard } = useMutation({
-    mutationFn: async () => {
-      const cardResponse = await api.openCard(gameId, card.id).json()
-      return cardResponse
-    },
-    onSuccess: async (cardObj) => {
-      setOpenedCards([...openedCards, {
-        ...cardObj,
-      }])
-    },
-  })
 
   // Получает и сохраняет картинку в стэйт picture
   useEffect(() => {
@@ -47,17 +36,14 @@ export const Card = ({
   }, [card])
 
   const handlerCardClick = () => {
-    if (card.isMatched || openedCards.length === 2) {
-      return
-    }
-    openCard()
+    socketOpenCard(gameId, card.id)
   }
 
   return (
     <div
       className={styles.containerImg}
       onClick={handlerCardClick}
-      disabled={card.isOpen}
+      disabled={card.isOpen || card.isMatched || isBoardLocked}
     >
       <img
         className={getCardStyle()}

@@ -19,8 +19,7 @@ import { notifyError } from '../../tools/toaster/toaster.js'
 export const NewGame = () => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
-  const changeGameType = useGameStore((state) => state.changeGameType)
-
+  const setGameType = useGameStore((state) => state.setGameType)
   const getGameTypesFunc = async () => {
     const response = await api.getGameTypes()
     return response.json()
@@ -38,7 +37,6 @@ export const NewGame = () => {
     },
   })
 
-  const addGameId = useGameStore((state) => state.addGameId)
   const clickHandler = () => {
     setIsOpen(true)
   }
@@ -51,15 +49,13 @@ export const NewGame = () => {
     mutationFn: (inputValues) => api.getGameId(inputValues.level, inputValues.gameType),
     onSuccess: async (response) => {
       const dataFromBd = await response.json()
-      addGameId(dataFromBd)
       navigate(`/game/${dataFromBd.gameId}`)
       closeHandler()
     },
   })
 
   const submitHandler = (values) => {
-    changeGameType(values.gameType)
-    localStorage.setItem('gameType', JSON.stringify(values.gameType))
+    setGameType(values.gameType)
     startGame(values)
   }
 
