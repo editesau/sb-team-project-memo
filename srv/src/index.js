@@ -3,10 +3,12 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import http from 'http'
+import { Server } from 'socket.io'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
   API_VERSION,
-  APP_PORT,
+  APP_PORT, CORS_ORIGIN,
   MONGO_CA_PATH,
   MONGO_CLIENT_CRT_PATH,
   MONGO_HOST,
@@ -17,13 +19,17 @@ import { authRouter } from './routers/authRouter.js'
 import { gameRouter } from './routers/gameRouter.js'
 import { checkAuth } from './middlewares/authMiddleware.js'
 import { userRouter } from './routers/userRouter.js'
+import { initializeSocketService } from './services/socketService.js'
 
 const app = express()
+const httpServer = http.createServer(app)
+initializeSocketService(httpServer)
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: CORS_ORIGIN,
   credentials: true,
 }))
+
 app.use(morgan(MORGAN_ENV))
 app.use(express.json())
 app.use(cookieParser())
@@ -40,7 +46,7 @@ const startApp = async () => {
     await mongoose.connect(mongoConnectionString, mongoConnectionOptions)
     console.log('DB connected')
     try {
-      app.listen(APP_PORT, '0.0.0.0', () => {
+      httpServer.listen(APP_PORT, '0.0.0.0', () => {
         console.log('Server has been started on port:', APP_PORT)
       })
     } catch (appError) {

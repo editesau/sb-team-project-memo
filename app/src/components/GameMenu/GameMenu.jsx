@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import styles from './gameMenu.module.scss'
 import { notifyError, notifySuccess } from '../../tools/toaster/toaster.js'
-import api from '../../tools/Api/Api.js'
+import api from '../../services/Api/Api.js'
 import { NewGame } from '../NewGame/NewGame'
 import fullLogo from '../../resources/images/logo/logo_full.png'
 

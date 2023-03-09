@@ -7,7 +7,7 @@ import {
 import UserSchema from './models/UserSchema.js'
 import GameSchema from './models/GameSchema.js'
 import {
-  setMatchedCards, openCard, closeCards, resetCards,
+  setMatchedCards, openCard, closeCards, resetCards, getCardPictureById,
 } from '../helpers/gameLogic/gameLogicFunctions.js'
 
 /** Function to generate mongoDB connection URL
@@ -87,43 +87,53 @@ export const dbGetUser = (userId) => {
   return User.findById(userId)
 }
 
-export const dbCreateGame = (userId, cards) => {
+export const dbCreateGame = (userId, cards, gameType) => {
   const Game = mongoose.model('games', GameSchema)
-  const newGame = Game({ userId, cards })
+  const newGame = Game({ userId, cards, type: gameType })
   return newGame.save()
 }
 
-export const dbGetGameCards = (userId, gameId) => {
+export const dbGetGame = (userId, gameId) => {
   const Game = mongoose.model('games', GameSchema)
   return Game.findOne({ _id: gameId, userId })
 }
 
 export const dbOpenCard = async (userId, gameId, cardId) => {
-  const game = await dbGetGameCards(userId, gameId)
+  const game = await dbGetGame(userId, gameId)
+  const openedCards = game.openedCards
+  openedCards.push({ id: cardId, picture: getCardPictureById(cardId, game.cards) })
   const newCards = openCard(game.cards, cardId)
   const Game = mongoose.model('games', GameSchema)
-  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards, openedCards }, { new: true })
 }
 
 export const dbCloseCards = async (userId, gameId, cardIds) => {
-  const game = await dbGetGameCards(userId, gameId)
+  const game = await dbGetGame(userId, gameId)
+  const openedCards = []
   const newCards = closeCards(game.cards, cardIds)
   const Game = mongoose.model('games', GameSchema)
-  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards, openedCards }, { new: true })
 }
 
 export const dbSetMatched = async (userId, gameId, cardIds) => {
-  const game = await dbGetGameCards(userId, gameId)
+  const game = await dbGetGame(userId, gameId)
+  const openedCards = []
   const newCards = setMatchedCards(game.cards, cardIds)
   const Game = mongoose.model('games', GameSchema)
-  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards, openedCards }, { new: true })
 }
 
+export const dbFinishGame = async (userId, gameId, state) => {
+  const game = await dbGetGame(userId, gameId)
+  const Game = mongoose.model('games', GameSchema)
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { state }, { new: true })
+}
 export const dbResetGame = async (userId, gameId) => {
-  const game = await dbGetGameCards(userId, gameId)
+  const game = await dbGetGame(userId, gameId)
+  const openedCards = []
   const newCards = resetCards(game.cards)
   const Game = mongoose.model('games', GameSchema)
-  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards }, { new: true })
+  return Game.findOneAndUpdate({ _id: gameId, userId }, { cards: newCards, openedCards }, { new: true })
 }
 
 export const dbChangeUserPassword = async (userId, newPassword) => {
