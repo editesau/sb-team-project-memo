@@ -1,0 +1,54 @@
+.wr {
+  margin-top: 5px;
+}
+.editForm{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 20px 20px; 
+}
+
+.select {
+  width: 250px;
+  height: 35px;
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  margin: 0px;
+}
+
+h2 {
+  color: black;
+}
+
+.wr_start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h2{
+    color: #5D0E9F;
+    font-size: 3rem;
+    font-weight: bold;
+  }
+}
+ .link {
+  
+    color: #f4e603;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    transition:         transform .5s ease-in-out;
+    cursor: pointer;
+
+    &:hover{
+    -webkit-transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
+      transform: rotate(25deg); /* Градусы поворота можно изменить по необходимости */
+    }
+  
+ }
