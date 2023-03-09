@@ -1,0 +1,11 @@
+name: test runner
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  test_job:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
