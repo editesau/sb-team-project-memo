@@ -4,7 +4,6 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import http from 'http'
-import { Server } from 'socket.io'
 import { genConnectionOptions, genConnectionString } from './db/dbActions.js'
 import {
   API_VERSION,

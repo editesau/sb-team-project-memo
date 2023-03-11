@@ -14,6 +14,6 @@ card Object {
 id - random,
 picture - card opened picture url
 isOpen - boolean
-isMathced - boolean
+isMatched - boolean
 }
  */

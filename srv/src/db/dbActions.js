@@ -47,7 +47,7 @@ export const dbCreateUser = async (user) => {
 /** function to check email and crypt password
  * provided in user object with DB
  * @param user user object required fields - email, password
- * @return {Promise<string>} successfull login
+ * @return {Promise<string>} successful login
  */
 export const dbLoginUser = async (user) => {
   const User = mongoose.model('users', UserSchema)
@@ -124,7 +124,6 @@ export const dbSetMatched = async (userId, gameId, cardIds) => {
 }
 
 export const dbFinishGame = async (userId, gameId, state) => {
-  const game = await dbGetGame(userId, gameId)
   const Game = mongoose.model('games', GameSchema)
   return Game.findOneAndUpdate({ _id: gameId, userId }, { state }, { new: true })
 }

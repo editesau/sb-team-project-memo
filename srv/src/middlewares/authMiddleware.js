@@ -1,5 +1,4 @@
 import TokenExpiredError from 'jsonwebtoken/lib/TokenExpiredError.js'
-import jwt from 'jsonwebtoken'
 import { checkToken } from '../services/jwtService.js'
 
 export const checkAuth = (req, res, next) => {
